@@ -3,32 +3,32 @@
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { DataTable } from "@/components/ui/DataTable";
 import type { DataTableColumn } from "@/components/ui/DataTable";
-import { adRequests } from "@/data/mockDatas";
+import { getAdRequests, type StoredAdRequest } from "@/utils/localStorage";
 
 type StatusType = "전체" | "검수중" | "검수완료";
 
-interface AdRequest {
-  id: number;
-  title: string;
-  company: string;
-  status: string;
-  createdAt: string;
-  budget: string;
-}
-
 const AdRequestsPage = () => {
   const [activeFilter, setActiveFilter] = useState<StatusType>("전체");
+  const [adRequests, setAdRequests] = useState<StoredAdRequest[]>([]);
   const router = useRouter();
 
-  // 필터링된 데이터
-  const filteredRequests = adRequests.filter((request) => {
-    if (activeFilter === "전체") return true;
-    return request.status === activeFilter;
-  });
+  // 로컬스토리지에서 데이터 로드
+  useEffect(() => {
+    const requests = getAdRequests();
+    setAdRequests(requests);
+  }, []);
+
+  // 필터링된 데이터 (ID가 높은 순으로 정렬 - 최신 순)
+  const filteredRequests = adRequests
+    .filter((request) => {
+      if (activeFilter === "전체") return true;
+      return request.status === activeFilter;
+    })
+    .sort((a, b) => b.id - a.id); // ID가 높은 순으로 정렬 (최신 순)
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -53,7 +53,7 @@ const AdRequestsPage = () => {
     return adRequests.filter((request) => request.status === status).length;
   };
 
-  const columns: DataTableColumn<AdRequest>[] = [
+  const columns: DataTableColumn<StoredAdRequest>[] = [
     {
       key: "title",
       title: "제목",
@@ -99,7 +99,7 @@ const AdRequestsPage = () => {
   ];
 
   // 로우 클릭 핸들러
-  const handleRowClick = (record: AdRequest) => {
+  const handleRowClick = (record: StoredAdRequest) => {
     router.push(`/ad-requests/${record.id}`);
   };
 
@@ -108,7 +108,7 @@ const AdRequestsPage = () => {
       {/* 헤더 */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold">광고 요청 목록 (예시 화면)</h2>
+          <h2 className="text-2xl font-semibold">광고 요청 목록</h2>
           <p className="text-muted-foreground">
             등록된 광고 요청을 관리하고 추적하세요.
           </p>

@@ -6,17 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { ArrowLeft } from "lucide-react";
 import {
-  ArrowLeft,
-  Calendar,
-  DollarSign,
-  Users,
-  Target,
-  Globe,
-  Image,
-  Settings,
-} from "lucide-react";
-import { adRequestDetails, type AdRequestDetail } from "@/data/mockDatas";
+  getAdRequestById,
+  updateAdRequestStatus,
+  type StoredAdRequest,
+} from "@/utils/localStorage";
+import { toast } from "sonner";
+import { Modal } from "@/components/common/Modal";
 import {
   getAdvertiserName,
   getCategoryName,
@@ -33,19 +30,18 @@ import {
 const AdRequestDetailPage = () => {
   const { id } = useParams();
   const router = useRouter();
-  const [adRequest, setAdRequest] = useState<AdRequestDetail | null>(null);
+  const [adRequest, setAdRequest] = useState<StoredAdRequest | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showApprovalModal, setShowApprovalModal] = useState(false);
 
   useEffect(() => {
-    // Mock API 호출 시뮬레이션
+    // 로컬스토리지에서 데이터 로드
     const fetchAdRequest = async () => {
       setLoading(true);
       // 실제로는 API 호출
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      const foundRequest = adRequestDetails.find(
-        (request) => request.id === Number(id)
-      );
+      const foundRequest = getAdRequestById(Number(id));
       setAdRequest(foundRequest || null);
       setLoading(false);
     };
@@ -62,6 +58,31 @@ const AdRequestDetailPage = () => {
       default:
         return "bg-gray-100 text-gray-800 border-gray-200";
     }
+  };
+
+  // 수정하기 버튼 클릭 핸들러
+  const handleEditClick = () => {
+    toast.info("현재 구현되지 않은 기능입니다.");
+  };
+
+  // 검수 완료 버튼 클릭 핸들러
+  const handleApprovalClick = () => {
+    setShowApprovalModal(true);
+  };
+
+  // 검수 완료 확인 핸들러
+  const handleConfirmApproval = () => {
+    if (adRequest) {
+      updateAdRequestStatus(adRequest.id, "검수완료");
+      setAdRequest({ ...adRequest, status: "검수완료" });
+      setShowApprovalModal(false);
+      toast.success("검수가 완료되었습니다!");
+    }
+  };
+
+  // 검수 완료 취소 핸들러
+  const handleCancelApproval = () => {
+    setShowApprovalModal(false);
   };
 
   if (loading) {
@@ -155,20 +176,20 @@ const AdRequestDetailPage = () => {
                   <label className="text-muted-foreground text-sm font-medium">
                     브랜드
                   </label>
-                  <p className="text-sm">{adRequest.campaignInfo.brand}</p>
+                  <p className="text-sm">{adRequest.formData.brand}</p>
                 </div>
                 <div>
                   <label className="text-muted-foreground text-sm font-medium">
                     거래처
                   </label>
-                  <p className="text-sm">{adRequest.campaignInfo.adVendor}</p>
+                  <p className="text-sm">{adRequest.formData.adVendor}</p>
                 </div>
                 <div>
                   <label className="text-muted-foreground text-sm font-medium">
                     광고주
                   </label>
                   <p className="text-sm">
-                    {getAdvertiserName(adRequest.campaignInfo.advertiserId)}
+                    {getAdvertiserName(adRequest.formData.advertiserId)}
                   </p>
                 </div>
                 <div>
@@ -176,7 +197,7 @@ const AdRequestDetailPage = () => {
                     카테고리
                   </label>
                   <p className="text-sm">
-                    {getCategoryName(adRequest.campaignInfo.categoryId)}
+                    {getCategoryName(adRequest.formData.categoryId)}
                   </p>
                 </div>
                 <div>
@@ -184,7 +205,7 @@ const AdRequestDetailPage = () => {
                     리포트 타입
                   </label>
                   <p className="text-sm">
-                    {getReportTypeName(adRequest.campaignInfo.reportType)}
+                    {getReportTypeName(adRequest.formData.reportType)}
                   </p>
                 </div>
                 <div>
@@ -193,7 +214,7 @@ const AdRequestDetailPage = () => {
                   </label>
                   <p className="text-sm">
                     {getRepeatParticipateTypeName(
-                      adRequest.campaignInfo.repeatParticipateTypeId
+                      adRequest.formData.repeatParticipateTypeId
                     )}
                   </p>
                 </div>
@@ -207,7 +228,7 @@ const AdRequestDetailPage = () => {
                 </label>
                 <div className="mt-1 flex flex-wrap gap-1">
                   {getHelpRequestPersonalInfoTypeNames(
-                    adRequest.campaignInfo.helpRequestPersonalInfoTypeIds
+                    adRequest.formData.helpRequestPersonalInfoTypeIds
                   ).map((name, index) => (
                     <Badge key={index} variant="secondary" className="text-xs">
                       {name}
@@ -221,7 +242,7 @@ const AdRequestDetailPage = () => {
                   CS 담당자
                 </label>
                 <p className="text-sm">
-                  {adRequest.campaignInfo.advertiserCsManagerNames || "미지정"}
+                  {adRequest.formData.advertiserCsManagerNames || "미지정"}
                 </p>
               </div>
 
@@ -230,7 +251,7 @@ const AdRequestDetailPage = () => {
                   이메일
                 </label>
                 <p className="text-sm">
-                  {adRequest.campaignInfo.advertiserCsManagerEmails}
+                  {adRequest.formData.advertiserCsManagerEmails}
                 </p>
               </div>
             </CardContent>
@@ -250,7 +271,7 @@ const AdRequestDetailPage = () => {
                     광고 타입
                   </label>
                   <p className="text-sm">
-                    {getAdTypeName(adRequest.adInfo.adTypeId)}
+                    {getAdTypeName(adRequest.formData.adTypeId)}
                   </p>
                 </div>
                 <div>
@@ -258,34 +279,34 @@ const AdRequestDetailPage = () => {
                     액션 타입
                   </label>
                   <p className="text-sm">
-                    {getAdActionTypeName(adRequest.adInfo.adActionTypeId)}
+                    {getAdActionTypeName(adRequest.formData.adActionTypeId)}
                   </p>
                 </div>
                 <div>
                   <label className="text-muted-foreground text-sm font-medium">
                     시작일
                   </label>
-                  <p className="text-sm">{adRequest.adInfo.startAt}</p>
+                  <p className="text-sm">{adRequest.formData.startAt}</p>
                 </div>
                 <div>
                   <label className="text-muted-foreground text-sm font-medium">
                     종료일
                   </label>
-                  <p className="text-sm">{adRequest.adInfo.endAt}</p>
+                  <p className="text-sm">{adRequest.formData.endAt}</p>
                 </div>
                 <div>
                   <label className="text-muted-foreground text-sm font-medium">
                     단가
                   </label>
                   <p className="text-sm">
-                    {Number(adRequest.adInfo.cost).toLocaleString()}원
+                    {Number(adRequest.formData.cost).toLocaleString()}원
                   </p>
                 </div>
                 <div>
                   <label className="text-muted-foreground text-sm font-medium">
                     일일 물량
                   </label>
-                  <p className="text-sm">{adRequest.adInfo.dailyActionCap}</p>
+                  <p className="text-sm">{adRequest.formData.dailyActionCap}</p>
                 </div>
               </div>
 
@@ -296,7 +317,7 @@ const AdRequestDetailPage = () => {
                   타겟 OS
                 </label>
                 <div className="mt-1 flex flex-wrap gap-1">
-                  {getTargetOsNames(adRequest.adInfo.targetOs).map(
+                  {getTargetOsNames(adRequest.formData.targetOs).map(
                     (os, index) => (
                       <Badge key={index} variant="outline" className="text-xs">
                         {os}
@@ -311,19 +332,21 @@ const AdRequestDetailPage = () => {
                   집행 시간
                 </label>
                 <p className="text-sm">
-                  {adRequest.adInfo.targetTimes.from} ~{" "}
-                  {adRequest.adInfo.targetTimes.to}
+                  {adRequest.formData.targetTimes.from} ~{" "}
+                  {adRequest.formData.targetTimes.to}
                 </p>
               </div>
 
-              {adRequest.adInfo.targetGenders && (
-                <div>
-                  <label className="text-muted-foreground text-sm font-medium">
-                    타겟 성별
-                  </label>
-                  <div className="mt-1 flex flex-wrap gap-1">
-                    {getTargetGenderNames(adRequest.adInfo.targetGenders).map(
-                      (gender, index) => (
+              {adRequest.formData.targetGenders &&
+                adRequest.formData.targetGenders.length > 0 && (
+                  <div>
+                    <label className="text-muted-foreground text-sm font-medium">
+                      타겟 성별
+                    </label>
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {getTargetGenderNames(
+                        adRequest.formData.targetGenders
+                      ).map((gender, index) => (
                         <Badge
                           key={index}
                           variant="outline"
@@ -331,20 +354,19 @@ const AdRequestDetailPage = () => {
                         >
                           {gender}
                         </Badge>
-                      )
-                    )}
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {adRequest.adInfo.targetAges && (
+              {adRequest.formData.targetAges && (
                 <div>
                   <label className="text-muted-foreground text-sm font-medium">
                     타겟 연령
                   </label>
                   <p className="text-sm">
-                    {adRequest.adInfo.targetAges.from}세 ~{" "}
-                    {adRequest.adInfo.targetAges.to}세
+                    {adRequest.formData.targetAges.from}세 ~{" "}
+                    {adRequest.formData.targetAges.to}세
                   </p>
                 </div>
               )}
@@ -355,7 +377,7 @@ const AdRequestDetailPage = () => {
                 </label>
                 <div className="mt-1 flex flex-wrap gap-1">
                   {getAdisonPublisherModeNames(
-                    adRequest.adInfo.targetAdisonPublisherIds.mode
+                    adRequest.formData.targetAdisonPublisherIds.mode
                   ).map((mode, index) => (
                     <Badge key={index} variant="outline" className="text-xs">
                       {mode}
@@ -383,25 +405,67 @@ const AdRequestDetailPage = () => {
                 <label className="text-muted-foreground text-sm font-medium">
                   기본 URL
                 </label>
-                <p className="text-sm break-all">
-                  {adRequest.adInfo.landingUrl.default}
-                </p>
+                {adRequest.formData.landingUrl.default ? (
+                  <p
+                    className={`
+                      cursor-pointer text-sm break-all text-blue-600
+                      hover:text-blue-800 hover:underline
+                    `}
+                    onClick={() =>
+                      window.open(
+                        adRequest.formData.landingUrl.default,
+                        "_blank"
+                      )
+                    }
+                  >
+                    {adRequest.formData.landingUrl.default}
+                  </p>
+                ) : (
+                  <p className="text-muted-foreground text-sm">-</p>
+                )}
               </div>
               <div>
                 <label className="text-muted-foreground text-sm font-medium">
                   Android URL
                 </label>
-                <p className="text-sm break-all">
-                  {adRequest.adInfo.landingUrl.android}
-                </p>
+                {adRequest.formData.landingUrl.android ? (
+                  <p
+                    className={`
+                      cursor-pointer text-sm break-all text-blue-600
+                      hover:text-blue-800 hover:underline
+                    `}
+                    onClick={() =>
+                      window.open(
+                        adRequest.formData.landingUrl.android,
+                        "_blank"
+                      )
+                    }
+                  >
+                    {adRequest.formData.landingUrl.android}
+                  </p>
+                ) : (
+                  <p className="text-muted-foreground text-sm">-</p>
+                )}
               </div>
               <div>
                 <label className="text-muted-foreground text-sm font-medium">
                   iOS URL
                 </label>
-                <p className="text-sm break-all">
-                  {adRequest.adInfo.landingUrl.ios}
-                </p>
+                {adRequest.formData.landingUrl.ios ? (
+                  <p
+                    className={`
+                      cursor-pointer text-sm break-all text-blue-600
+                      hover:text-blue-800 hover:underline
+                    `}
+                    onClick={() =>
+                      window.open(adRequest.formData.landingUrl.ios, "_blank")
+                    }
+                  >
+                    {adRequest.formData.landingUrl.ios}
+                  </p>
+                ) : (
+                  <p className="text-muted-foreground text-sm">-</p>
+                )}
               </div>
             </div>
           </CardContent>
@@ -425,7 +489,7 @@ const AdRequestDetailPage = () => {
                     제목
                   </label>
                   <p className="text-sm font-medium">
-                    {adRequest.adInfo.viewAssets.title}
+                    {adRequest.formData.viewAssets.title}
                   </p>
                 </div>
                 <div>
@@ -433,7 +497,7 @@ const AdRequestDetailPage = () => {
                     부제목
                   </label>
                   <p className="text-sm">
-                    {adRequest.adInfo.viewAssets.subtitle}
+                    {adRequest.formData.viewAssets.subtitle}
                   </p>
                 </div>
                 <div>
@@ -441,7 +505,7 @@ const AdRequestDetailPage = () => {
                     상세 타이틀
                   </label>
                   <p className="text-sm">
-                    {adRequest.adInfo.viewAssets.detailTitle}
+                    {adRequest.formData.viewAssets.detailTitle}
                   </p>
                 </div>
                 <div>
@@ -449,7 +513,7 @@ const AdRequestDetailPage = () => {
                     상세 부제목
                   </label>
                   <p className="text-sm">
-                    {adRequest.adInfo.viewAssets.detailSubtitle}
+                    {adRequest.formData.viewAssets.detailSubtitle}
                   </p>
                 </div>
                 <div>
@@ -457,7 +521,7 @@ const AdRequestDetailPage = () => {
                     CTA
                   </label>
                   <p className="text-sm">
-                    {adRequest.adInfo.viewAssets.callToAction}
+                    {adRequest.formData.viewAssets.callToAction}
                   </p>
                 </div>
               </div>
@@ -468,7 +532,7 @@ const AdRequestDetailPage = () => {
                     피드 썸네일
                   </label>
                   <p className="text-sm break-all text-blue-600">
-                    {adRequest.adInfo.viewAssets.thumbnailFeed}
+                    {adRequest.formData.viewAssets.thumbnailFeed}
                   </p>
                 </div>
                 <div>
@@ -476,7 +540,7 @@ const AdRequestDetailPage = () => {
                     아이콘
                   </label>
                   <p className="text-sm break-all text-blue-600">
-                    {adRequest.adInfo.viewAssets.thumbnailIcon}
+                    {adRequest.formData.viewAssets.thumbnailIcon}
                   </p>
                 </div>
                 <div>
@@ -484,7 +548,7 @@ const AdRequestDetailPage = () => {
                     상세 이미지
                   </label>
                   <p className="text-sm break-all text-blue-600">
-                    {adRequest.adInfo.viewAssets.detailImage}
+                    {adRequest.formData.viewAssets.detailImage}
                   </p>
                 </div>
                 <div>
@@ -492,7 +556,7 @@ const AdRequestDetailPage = () => {
                     안내사항
                   </label>
                   <p className="rounded-md bg-gray-50 p-3 text-sm">
-                    {adRequest.adInfo.viewAssets.notice}
+                    {adRequest.formData.viewAssets.notice}
                   </p>
                 </div>
               </div>
@@ -507,12 +571,26 @@ const AdRequestDetailPage = () => {
           </Button>
           {adRequest.status === "검수중" && (
             <>
-              <Button variant="outline">수정하기</Button>
-              <Button>검수 완료</Button>
+              <Button variant="outline" onClick={handleEditClick}>
+                수정하기
+              </Button>
+              <Button onClick={handleApprovalClick}>검수 완료</Button>
             </>
           )}
         </div>
       </div>
+
+      {/* 검수 완료 확인 모달 */}
+      <Modal
+        isOpen={showApprovalModal}
+        onClose={handleCancelApproval}
+        onConfirm={handleConfirmApproval}
+        title="검수 완료 확인"
+        description="검수를 완료하시겠습니까?"
+        cancelText="취소"
+        confirmText="확인"
+        size="sm"
+      />
     </div>
   );
 };

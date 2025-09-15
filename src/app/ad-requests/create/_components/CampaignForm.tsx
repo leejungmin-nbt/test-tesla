@@ -14,6 +14,7 @@ import advertisersData from "@/data/advertisers.json";
 import advertiserIntegrationsData from "@/data/advertiserIntegrations.json";
 import helpRequestPersonalInfoTypesData from "@/data/helpRequestPersonalInfoTypes.json";
 import repeatParticipateTypesData from "@/data/repeatParticipateTypes.json";
+import { generateTestData } from "@/utils/testDataGenerator";
 
 // repeatParticipateTypes.json 데이터를 기반으로 REPEAT_PARTICIPATE_TYPE_OPTIONS 생성
 const REPEAT_PARTICIPATE_TYPE_OPTIONS = repeatParticipateTypesData.map(
@@ -50,32 +51,6 @@ const HELP_REQUEST_PERSONAL_INFO_TYPE_OPTIONS =
     label: helpRequestPersonalInfoType.name,
   }));
 
-// Mock 데이터
-const MOCK_STEP1_DATA = {
-  title: "신제품 런칭 광고",
-  advertiserId: "1",
-  brand: "테크스타트업",
-  adVendor: "테크스타트업",
-  categoryId: "1",
-  advertiserIntegrationId: "3",
-  reportType: "NORMAL",
-  repeatParticipateTypeId: "1",
-  helpRequestPersonalInfoTypeIds: [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-  ],
-  advertiserCsManagerNames: "이정민담당자",
-  advertiserCsManagerEmails: "marketing@techstartup.com",
-};
-
 interface CampaignFormProps {
   control: Control<AdRequestCreateFormType>;
   setValue: UseFormSetValue<AdRequestCreateFormType>;
@@ -83,8 +58,25 @@ interface CampaignFormProps {
 
 const CampaignForm: React.FC<CampaignFormProps> = ({ control, setValue }) => {
   const addMockStep1Data = () => {
-    Object.entries(MOCK_STEP1_DATA).forEach(([key, value]) => {
-      setValue(key as keyof AdRequestCreateFormType, value as never, {
+    const testData = generateTestData();
+
+    // Step 1 관련 필드만 설정
+    const step1Fields: (keyof AdRequestCreateFormType)[] = [
+      "title",
+      "advertiserId",
+      "brand",
+      "adVendor",
+      "categoryId",
+      "advertiserIntegrationId",
+      "reportType",
+      "repeatParticipateTypeId",
+      "helpRequestPersonalInfoTypeIds",
+      "advertiserCsManagerNames",
+      "advertiserCsManagerEmails",
+    ];
+
+    step1Fields.forEach((field) => {
+      setValue(field, testData[field], {
         shouldDirty: true,
         shouldValidate: true,
       });

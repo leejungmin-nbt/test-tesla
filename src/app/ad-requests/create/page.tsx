@@ -19,6 +19,8 @@ import {
   saveFormData,
   loadFormData,
   clearFormData,
+  saveAdRequest,
+  type StoredAdRequest,
 } from "@/utils/localStorage";
 import ConfirmRegistrationModal from "./_components/ConfirmRegistrationModal";
 import { toast } from "sonner";
@@ -217,10 +219,28 @@ const CreateAdRequestPage = () => {
   // 실제 등록 처리
   const onSubmit = (data: AdRequestCreateFormType) => {
     console.log("제출 폼 데이터 >> ", data);
+
+    // 고유 ID 생성 (현재 시간 기반)
+    const id = Date.now();
+
+    // 등록된 광고 요청 데이터 생성
+    const adRequest: StoredAdRequest = {
+      id,
+      title: data.title,
+      company: data.adVendor,
+      status: "검수중",
+      createdAt: new Date().toISOString().split("T")[0],
+      budget: `${Number(data.budget).toLocaleString()}원`,
+      formData: data,
+    };
+
+    // 로컬스토리지에 저장
+    saveAdRequest(adRequest);
+
+    // 임시 폼 데이터 삭제
     clearFormData();
     setShowConfirmModal(false);
 
-    //폼 등록 관련 로직 추가 필요....
     toast.success("광고 요청이 성공적으로 등록되었습니다!");
 
     router.push("/ad-requests");

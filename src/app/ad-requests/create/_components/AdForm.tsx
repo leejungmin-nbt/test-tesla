@@ -17,50 +17,7 @@ import adSettleTypesData from "@/data/adSettleTypes.json";
 import TimeRangeForm from "./TimeRangeForm";
 import AgeRangeForm from "./AgeRangeForm";
 import AdisonPublisherTargetingForm from "./AdisonPublisherTargetingForm";
-// Mock 데이터
-const MOCK_STEP2_DATA = {
-  targetCookieovenPublisherIds: ["1", "2"], // 웹툰, 시리즈 모두 선택
-  adActionTypeId: "1",
-  targetOs: ["Android", "iOS"],
-  adTypeId: "1",
-  startAt: "2025-09-29T18:03:00.000Z",
-  endAt: "2025-10-05T18:00:00.000Z",
-  targetTimes: { from: "09:00", to: "18:00" },
-  landingUrl: {
-    default: "https://www.example.com/landing",
-    android: "https://www.example.com/landing/android",
-    ios: "https://www.example.com/landing/ios",
-  },
-  viewAssets: {
-    thumbnailFeed:
-      "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400",
-    thumbnailIcon:
-      "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=100",
-    title: "특별한 혜택을 놓치지 마세요!",
-    subtitle: "지금 바로 시작하는 특별한 광고 캠페인",
-    detailImage:
-      "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800",
-    navigationTitle: "광고 상세 정보",
-    detailTitle: "더 자세한 정보가 궁금하다면?",
-    detailSubtitle: "이벤트 참여 방법과 혜택을 확인해보세요",
-    callToAction: "지금 바로 참여하기",
-    notice:
-      "이벤트 참여 시 개인정보가 수집될 수 있습니다. 참여 전 이용약관을 확인해주세요.",
-  },
-  adSettleTypeId: "1",
-  cost: "5000",
-  minPaymentAmount: "10000",
-  budget: "5000000",
-  dailyActionCap: "5000",
-  delayTerm: "7",
-  participateExpiredAt: "30",
-  targetGenders: ["Male", "Female"],
-  targetAges: { from: "20", to: "40" },
-  targetAdisonPublisherIds: {
-    mode: ["INCLUDE"],
-    publisherIds: ["1", "2", "3"],
-  },
-};
+import { generateTestData } from "@/utils/testDataGenerator";
 
 interface AdFormProps {
   control: Control<AdRequestCreateFormType>;
@@ -184,8 +141,33 @@ const AdForm: React.FC<AdFormProps> = ({ control, setValue }) => {
   });
 
   const addMockStep2Data = () => {
-    Object.entries(MOCK_STEP2_DATA).forEach(([key, value]) => {
-      setValue(key as keyof AdRequestCreateFormType, value as never, {
+    const testData = generateTestData();
+
+    // Step 2 관련 필드만 설정
+    const step2Fields: (keyof AdRequestCreateFormType)[] = [
+      "targetCookieovenPublisherIds",
+      "adActionTypeId",
+      "targetOs",
+      "adTypeId",
+      "startAt",
+      "endAt",
+      "targetTimes",
+      "landingUrl",
+      "viewAssets",
+      "adSettleTypeId",
+      "cost",
+      "minPaymentAmount",
+      "budget",
+      "dailyActionCap",
+      "delayTerm",
+      "participateExpiredAt",
+      "targetGenders",
+      "targetAges",
+      "targetAdisonPublisherIds",
+    ];
+
+    step2Fields.forEach((field) => {
+      setValue(field, testData[field], {
         shouldDirty: true,
         shouldValidate: true,
       });
