@@ -326,7 +326,7 @@ export const generateTestData = (): AdRequestCreateFormType => {
 
     // Step 2: 광고 정보
     targetCookieovenPublisherIds: getRandomItems(
-      ["0", "1"],
+      ["1", "2"],
       getRandomNumber(1, 2)
     ),
     adActionTypeId: "1", // 실제 데이터에 없으므로 고정값
