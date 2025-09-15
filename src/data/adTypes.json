@@ -1,0 +1,212 @@
+[
+  {
+    "id": 1,
+    "code": "cpi",
+    "name": "CPI",
+    "description": "설치 완료 시 SDK 로부터 포스트백을 받는 설치형 광고",
+    "component_json": "{\r\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\r\n  \"type\": \"object\",\r\n  \"properties\": {\r\n    \"package_name\": {\r\n      \"title\": \"패키지 명\",\r\n      \"description\": \"완료 기준이 되는 패키지 식별자를 입력 하세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": true\r\n    }\r\n  }\r\n}",
+    "filter_json": "{}",
+    "created_at": "2018-10-26 14:17:49",
+    "updated_at": "2022-11-18 16:46:05"
+  },
+  {
+    "id": 2,
+    "code": "cpa_s2s",
+    "name": "CPA S2S",
+    "description": "광고주의 서버로부터 포스트백을 받는 실행형 광고.",
+    "component_json": "{\r\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\r\n  \"type\": \"object\",\r\n  \"properties\": {\r\n    \"min_payment_amount\": {\r\n      \"title\": \"최소 결제 금액\",\r\n      \"description\": \"리워드 지급/회수 기준에 사용될 최소 결제 금액을 입력하세요. 단, 리워드 유연화 광고인 경우 해당값은 무시되며 완료 조건 그룹에서 세팅된 설정으로 동작합니다.\",\r\n      \"type\": \"string\",\r\n      \"format\": \"number_with_comma\",\r\n      \"required\": false\r\n    },\r\n    \"advertiser_token\": {\r\n      \"title\": \"광고주 연동 토큰\",\r\n      \"description\": \"광고주 연동 토큰을 검증할 경우 입력합니다.\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"not_support_ios_att_popup\": {\r\n      \"title\": \"iOS ATT 팝업 미지원 여부\",\r\n      \"description\": \"ATT 팝업을 미지원하는 광고인 경우 체크해주세요. 체크 시 iOS 14.5 이상에서 노출이 제외됩니다.\",\r\n      \"type\": \"boolean\",\r\n      \"required\": true\r\n    },\r\n    \"landing_type\": {\r\n      \"title\": \"랜딩 타입\",\r\n      \"description\": \"랜딩 타입을 선택해주세요. SDK 3.7.8 부터 동작하며 미호환 SDK 에서는 기본값으로만 동작합니다.\",\r\n      \"type\": \"integer\",\r\n      \"enum\": [\r\n        { \"label\": \"외부 URL 요청 (기본값)\", \"value\":  0 },\r\n        { \"label\": \"인앱브라우저\", \"value\": 1 }\r\n      ],\r\n      \"required\": true\r\n    }\r\n  }\r\n}",
+    "filter_json": "{}",
+    "created_at": "2018-10-26 14:17:49",
+    "updated_at": "2024-07-15 17:28:37"
+  },
+  {
+    "id": 3,
+    "code": "cpa_tracker",
+    "name": "CPA TRACKER",
+    "description": "광고주가 사용중인 트래커로부터 포스트백을 받는 실행형 광고",
+    "component_json": "{\r\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\r\n  \"type\": \"object\",\r\n  \"properties\": {\r\n    \"complete_event\": {\r\n      \"title\": \"완료 이벤트 이름\",\r\n      \"description\": \"광고주로부터 전달받은 완료 포스백 이벤트 이름을 입력 하세요(ex: install)\",\r\n      \"type\": \"string\",\r\n      \"required\": true\r\n    },\r\n    \"event_parameters\": {\r\n      \"type\": \"array\",\r\n      \"title\": \"완료 이벤트 조건(event_parameters JSON 파라미터)\",\r\n      \"description\": \"ex) event_parameters={\\\"amount\\\":\\\"10000\\\"}\",\r\n      \"uniqueItems\": true,\r\n      \"items\": {\r\n        \"description\": \"JSON 파라미터에 해당하는 조건 추가\",\r\n        \"type\": \"object\",\r\n        \"properties\": {\r\n          \"event_type\": {\r\n            \"title\": \"이벤트 타입\",\r\n            \"required\": true,\r\n            \"type\": \"string\",\r\n            \"enum\": [\r\n              \"value\",\r\n              \"range\",\r\n              \"not_allowed_value\"\r\n            ]\r\n          },\r\n          \"key\": {\r\n            \"type\": \"string\",\r\n            \"title\": \"이벤트 이름\",\r\n            \"description\": \"대상 이벤트 명\",\r\n            \"required\": true\r\n          },\r\n          \"value\": {\r\n            \"type\": \"object\",\r\n            \"properties\": {\r\n              \"value\": {\r\n                \"type\": \"string\",\r\n                \"title\": \"value\",\r\n                \"maxLength\": 41000\r\n              },\r\n              \"from\": {\r\n                \"type\": \"string\",\r\n                \"title\": \"from\"\r\n              },\r\n              \"to\": {\r\n                \"type\": \"string\",\r\n                \"title\": \"to\"\r\n              }\r\n            }\r\n          }\r\n        }\r\n      }\r\n    },\r\n    \"parameter_conditions\": {\r\n      \"type\": \"array\",\r\n      \"title\": \"완료 이벤트 조건 (개별 파라미터)\",\r\n      \"description\": \"ex) amount=10000\",\r\n      \"uniqueItems\": true,\r\n      \"items\": {\r\n        \"description\": \"개별 파라미터에 해당하는 조건 추가\",\r\n        \"type\": \"object\",\r\n        \"properties\": {\r\n          \"event_type\": {\r\n            \"title\": \"파라미터 타입\",\r\n            \"required\": true,\r\n            \"type\": \"string\",\r\n            \"enum\": [\r\n              \"value\",\r\n              \"range\",\r\n              \"not_allowed_value\"\r\n            ]\r\n          },\r\n          \"key\": {\r\n            \"type\": \"string\",\r\n            \"title\": \"파라미터 이름\",\r\n            \"description\": \"파라미터 명\",\r\n            \"required\": true\r\n          },\r\n          \"value\": {\r\n            \"type\": \"object\",\r\n            \"properties\": {\r\n              \"value\": {\r\n                \"type\": \"string\",\r\n                \"title\": \"value\",\r\n                \"maxLength\": 41000\r\n              },\r\n              \"from\": {\r\n                \"type\": \"string\",\r\n                \"title\": \"from\"\r\n              },\r\n              \"to\": {\r\n                \"type\": \"string\",\r\n                \"title\": \"to\"\r\n              }\r\n            }\r\n          }\r\n        }\r\n      }\r\n    },\r\n    \"min_payment_amount\": {\r\n      \"title\": \"최소 결제 금액\",\r\n      \"description\": \"리워드 지급/회수 기준에 사용될 최소 결제 금액을 입력하세요. (고정 리워드 광고 전용이며 취소 포스트백 연동 광고주인 경우만 사용 가능)\",\r\n      \"type\": \"string\",\r\n      \"format\": \"number_with_comma\",\r\n      \"required\": false\r\n    },\r\n    \"not_support_ios_att_popup\": {\r\n      \"title\": \"iOS ATT 팝업 미지원 여부\",\r\n      \"description\": \"ATT 팝업을 미지원하는 광고인 경우 체크해주세요. 체크 시 iOS 14.5 이상에서 노출이 제외됩니다.\",\r\n      \"type\": \"boolean\",\r\n      \"required\": true\r\n    }\r\n  }\r\n}\r\n",
+    "filter_json": "{}",
+    "created_at": "2018-10-26 14:17:49",
+    "updated_at": "2024-10-23 15:20:00"
+  },
+  {
+    "id": 4,
+    "code": "cpf",
+    "name": "CPF",
+    "description": "인스타그램 팔로우 후 사용자가 적립요청을 하는 실행형 광고",
+    "component_json": "{\r\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\r\n  \"type\": \"object\",\r\n  \"properties\": {\r\n    \"instagram_id\": {\r\n      \"title\": \"인스타그램 ID\",\r\n      \"description\": \"Follow 할 인스타그램의 ID 를 입력하세요. (ex: naver_webtoon)\",\r\n      \"type\": \"string\",\r\n      \"required\": true\r\n    }\r\n  }\r\n}",
+    "filter_json": "{}",
+    "created_at": "2018-10-26 14:17:49",
+    "updated_at": "2022-11-18 16:46:13"
+  },
+  {
+    "id": 5,
+    "code": "cpa_bridge",
+    "name": "CPA BRIDGE",
+    "description": "광고주 서버에서 제공하는 브릿지 페이지를 경유해서 앱을 설치 후 실행하고 특정 이벤트 발생 시 광고주 서버로부터 포스트백을 받는 실행형 광고",
+    "component_json": "{\r\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\r\n  \"type\": \"object\",\r\n  \"properties\": {\r\n    \"not_support_ios_att_popup\": {\r\n      \"title\": \"iOS ATT 팝업 미지원 여부\",\r\n      \"description\": \"ATT 팝업을 미지원하는 광고인 경우 체크해주세요. 체크 시 iOS 14.5 이상에서 노출이 제외됩니다.\",\r\n      \"type\": \"boolean\",\r\n      \"required\": true\r\n    }\r\n  }\r\n}",
+    "filter_json": "{}",
+    "created_at": "2018-11-14 18:52:27",
+    "updated_at": "2022-11-18 16:46:15"
+  },
+  {
+    "id": 6,
+    "code": "cpa_subscribe",
+    "name": "CPA SUBSCRIBE",
+    "description": "브릿지 페이지에서 구독하기 버튼을 클릭하여 구독페이지로 이동 후 다시 브릿지로 돌아와서 적립요청을 하는 실행형 광고",
+    "component_json": "{\r\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\r\n  \"type\": \"object\",\r\n  \"properties\": {\r\n    \"title_message\": {\r\n      \"title\": \"타이틀 메세지\",\r\n      \"description\": \"타이틀 영역에 노출될 문구를 입력하세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"guide_message\": {\r\n      \"title\": \"가이드 메세지\",\r\n      \"description\": \"구독 하러가기 영역에 노출될 가이드 문구를 입력하세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": true\r\n    },\r\n    \"button_message\": {\r\n      \"title\": \"버튼 메세지\",\r\n      \"description\": \"구독하기 버튼에 표기될 메세지를 입력 하세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": true\r\n    },\r\n    \"landing_url\": {\r\n      \"title\": \"구독 페이지 랜딩 URL\",\r\n      \"description\": \"구독 페이지의 랜딩 URL 를 입력 하세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"landing_url_aos\": {\r\n      \"title\": \"구독 페이지 랜딩 URL (Android)\",\r\n      \"description\": \"Android 전용 구독 페이지의 랜딩 URL 을 사용하는 경우 입력 하세요.(Web 포함)\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"landing_url_ios\": {\r\n      \"title\": \"구독 페이지 랜딩 URL (iOS)\",\r\n      \"description\": \"iOS 전용 구독 페이지의 랜딩 URL 을 사용하는 경우 입력 하세요.(Web 포함)\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"target_name\": {\r\n      \"title\": \"구독 대상 이름\",\r\n      \"description\": \"'ㅇㅇ 하러가기' 영역에 노출될 대상 이름을 입력하세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": false,\r\n      \"enum\": [\r\n        \"기본이벤트\",\r\n        \"구독\",\r\n        \"언론사 구독\",\r\n        \"팔로우\",\r\n        \"팔로우_추가지급\",\r\n        \"좋아요\",\r\n        \"채널추가\",\r\n        \"네이버TV 구독\",\r\n        \"스토어찜\",\r\n        \"쇼핑라이브 알림받기\",\r\n        \"라이브방송 참여하기\",\r\n        \"배달의민족_주문인증\",\r\n        \"요기요_주문인증\",\r\n        \"쿠팡이츠_주문인증\",\r\n        \"유튜브_좋아요\",\r\n        \"네이버_플레이스_저장\"\r\n      ]\r\n    },\r\n    \"vision_enabled\": {\r\n      \"title\": \"이미지 인식 사용 여부\",\r\n      \"description\": \"이미지 인식 사용 여부를 체크해주세요.\",\r\n      \"type\": \"boolean\",\r\n      \"required\": false\r\n    },\r\n    \"view_type\": {\r\n      \"title\": \"랜딩 템플릿\",\r\n      \"description\": \"랜딩 템플릿 선택\",\r\n      \"type\": \"string\",\r\n      \"enum\": [\r\n        \"origin\",\r\n        \"renewal\"\r\n      ],\r\n      \"required\": true\r\n    },\r\n    \"vision_realize_id\": {\r\n      \"title\": \"이미지 인식에 사용할 식별자\",\r\n      \"description\": \"이미지 인식에 사용할 식별자 (전용 매크로를 이용한 AND, OR 조건식 작성 필요)\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"vision_realize_example_image\": {\r\n      \"title\": \"이미지 인식 예시 이미지\",\r\n      \"description\": \"이미지 인식에 예시로 사용할 이미지를 등록해주세요.\",\r\n      \"type\": \"ad_detail_image\",\r\n      \"origin_format\": true,\r\n      \"required\": false\r\n    },\r\n    \"secondary_action_enabled\": {\r\n      \"title\": \"2차 액션 팝업 사용\",\r\n      \"description\": \"2차 액션 팝업 사용 여부를 선택해주세요.\",\r\n      \"type\": \"boolean\",\r\n      \"required\": false\r\n    },\r\n    \"secondary_action_image_url\": {\r\n      \"title\": \"2차 액션 팝업 이미지\",\r\n      \"description\": \"2차 액션 팝업 이미지를 입력해주세요.\",\r\n      \"type\": \"ad_detail_image\",\r\n      \"required\": false,\r\n      \"origin_format\": true\r\n    },\r\n    \"secondary_action_title\": {\r\n      \"title\": \"2차 액션 팝업 타이틀\",\r\n      \"description\": \"2차 액션 팝업 타이틀을 입력해주세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"secondary_action_button_name\": {\r\n      \"title\": \"2차 액션 팝업 액션 버튼명\",\r\n      \"description\": \"2차 액션 팝업 액션 버튼명을 입력해주세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"secondary_action_landing_url\": {\r\n      \"title\": \"2차 액션 팝업 랜딩 URL\",\r\n      \"description\": \"2차 액션 팝업 랜딩 URL을 입력해주세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"wait_seconds_after_landing\": {\r\n      \"title\": \"구독 페이지 랜딩 후 대기 시간(초)\",\r\n      \"description\": \"구독 페이지 랜딩 후 대기하는 시간(초)를 입력해주세요.\",\r\n      \"type\": \"integer\",\r\n      \"required\": false,\r\n      \"minimum\": 1,\r\n      \"maximum\": 1800\r\n    },\r\n    \"upload_wait_text\": {\r\n      \"title\": \"업로드 대기 중 버튼 텍스트\",\r\n      \"description\": \"구독 페이지 랜딩 후 대기 중에 표시될 업로드 버튼 텍스트를 입력해주세요. (예: 시청 완료까지 {remain_time} 남았습니다.)\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"upload_wait_alert\": {\r\n      \"title\": \"업로드 대기 중 얼럿 메시지\",\r\n      \"description\": \"구독 페이지 랜딩 후 대기 중에 업로드 버튼 클릭 시 노출될 얼럿 메시지를 입력해주세요. (예: 시청 완료 후에 스크린샷을 업로드해주세요)\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"step3_additional_message\": {\r\n      \"title\": \"Step3 영역 추가 안내문구\",\r\n      \"description\": \"Step3 영역에 추가할 안내 문구를 입력해주세요\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    }\r\n  }\r\n}\r\n",
+    "filter_json": "{}",
+    "created_at": "2019-01-02 17:18:44",
+    "updated_at": "2024-10-16 17:54:08"
+  },
+  {
+    "id": 7,
+    "code": "cpq",
+    "name": "CPQ",
+    "description": "브릿지 페이지에서 퀴즈를 맞추고 적립 요청을 하는 실행형 광고",
+    "component_json": "{\r\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\r\n  \"type\": \"object\",\r\n  \"properties\": {\r\n  \"view_type\": {\r\n      \"title\": \"CPQ 뷰\",\r\n      \"description\": \"CPQ에 노출될 뷰스타일 선택\",\r\n      \"type\": \"string\",\r\n      \"enum\": [\r\n        \"offerwall\",\r\n        \"renewal\"\r\n      ],\r\n      \"support_roles\": [\"staff\"],\r\n      \"required\": true\r\n    },\r\n    \"youtube_id\": {\r\n      \"title\": \"유튜브 ID\",\r\n      \"description\": \"유뷰트 영상을 노출하고자 할 경우 ID를 입력하세요.(이미지, 유튜브, 네이버TV 셋중 하나만 입력)\",\r\n      \"type\": \"string\"\r\n    },\r\n    \"naver_tv_code\": {\r\n      \"title\": \"네이버 TV CODE\",\r\n      \"description\": \"네이버 TV 페이지 내의 공유 버튼을 눌러 제일 하단의 코드를 복사 후 넣어주세요.(이미지, 유튜브, 네이버TV 셋중 하나만 입력)\",\r\n      \"type\": \"string\"\r\n    },\r\n    \"image\": {\r\n      \"title\": \"이미지\",\r\n      \"description\": \"이미지를 노출하고자 할 경우 이미지를 입력해 주세요.(이미지, 유튜브, 네이버TV 셋중 하나만 입력)\",\r\n      \"type\": \"ad_detail_image\",\r\n      \"origin_format\": true\r\n    },\r\n    \"description\": {\r\n      \"title\": \"퀴즈 설명\",\r\n      \"description\": \"퀴즈 내용 및 설명을 입력 해 주세요.\",\r\n      \"type\": \"tinymce\",\r\n      \"required\": true\r\n    },\r\n    \"answer\": {\r\n      \"title\": \"정답\",\r\n      \"description\": \"퀴즈의 정답을 입력해주세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": true\r\n    },\r\n    \"answer_placeholder\": {\r\n      \"title\": \"정답 placeholder 텍스트\",\r\n      \"description\": \"정답 입력 필드의 placeholder 텍스트를 입력해주세요. (기본값 : 정답을 입력해주세요)\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"wrong_answer_message\": {\r\n      \"title\": \"오답 alert 메시지\",\r\n      \"description\": \"오답 alert 메시지를 입력해주세요. (기본값 : 정답이 틀렸습니다.)\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"button_primary_color\": {\r\n      \"title\": \"퀴즈 완료 버튼 배경색\",\r\n      \"description\": \"퀴즈 완료 버튼 배경색 (기본값 : #272727)\",\r\n      \"type\": \"string\",\r\n      \"support_roles\": [\"staff\"],\r\n      \"required\": false\r\n    },\r\n    \"button_on_primary_color\": {\r\n      \"title\": \"퀴즈 완료 버튼 글자색\",\r\n      \"description\": \"퀴즈 완료 버튼 글자색 (기본값 : #ffffff)\",\r\n      \"type\": \"string\",\r\n      \"support_roles\": [\"staff\"],\r\n      \"required\": false\r\n    },\r\n    \"pre_landing_enabled\": {\r\n      \"title\": \"사전 랜딩(딥링크) 사용\",\r\n      \"description\": \"정답 제출 전 사전 랜딩/딥링크(예: 음원상세페이지) 실행 여부를 체크하는 기능입니다.\",\r\n      \"type\": \"boolean\",\r\n      \"required\": false\r\n    },\r\n    \"pre_landing_url\": {\r\n      \"title\": \"사전 랜딩 URL\",\r\n      \"description\": \"사전 랜딩 URL 을 입력해주세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"pre_landing_button_message\": {\r\n      \"title\": \"사전 랜딩 버튼 텍스트\",\r\n      \"description\": \"사전 랜딩 실행 버튼 텍스트를 입력해주세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"pre_landing_invalid_message\": {\r\n      \"title\": \"사전 랜딩 미실행 alert 메시지\",\r\n      \"description\": \"사전 랜딩 미실행 alert 메시지를 입력해주세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"secondary_action_enabled\": {\r\n      \"title\": \"2차 액션 팝업 사용\",\r\n      \"description\": \"2차 액션 팝업 사용 여부를 선택해주세요.\",\r\n      \"type\": \"boolean\",\r\n      \"required\": false\r\n    },\r\n    \"secondary_action_image_url\": {\r\n      \"title\": \"2차 액션 팝업 이미지\",\r\n      \"description\": \"2차 액션 팝업 이미지를 입력해주세요.\",\r\n      \"type\": \"ad_detail_image\",\r\n      \"required\": false,\r\n      \"origin_format\": true\r\n    },\r\n    \"secondary_action_title\": {\r\n      \"title\": \"2차 액션 팝업 타이틀\",\r\n      \"description\": \"2차 액션 팝업 타이틀을 입력해주세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"secondary_action_button_name\": {\r\n      \"title\": \"2차 액션 팝업 액션 버튼명\",\r\n      \"description\": \"2차 액션 팝업 액션 버튼명을 입력해주세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"secondary_action_landing_url\": {\r\n      \"title\": \"2차 액션 팝업 랜딩 URL\",\r\n      \"description\": \"2차 액션 팝업 랜딩 URL을 입력해주세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    }\r\n  }\r\n}",
+    "filter_json": "{}",
+    "created_at": "2019-05-03 17:18:22",
+    "updated_at": "2022-11-18 16:46:22"
+  },
+  {
+    "id": 8,
+    "code": "cpa_sns_viral",
+    "name": "SNS VIRAL",
+    "description": "이미지 인식 기능을 이용한 SNS 바이럴 광고",
+    "component_json": "{\r\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\r\n  \"type\": \"object\",\r\n  \"properties\": {\r\n    \"view_type\": {\r\n      \"title\": \"랜딩 템플릿\",\r\n      \"description\": \"랜딩 템플릿 선택\",\r\n      \"type\": \"string\",\r\n      \"enum\": [\r\n        \"origin\",\r\n        \"renewal\"\r\n      ],\r\n      \"required\": true\r\n    },\r\n    \"sns_type\": {\r\n      \"title\": \"SNS 타입\",\r\n      \"description\": \"SNS 타입 선택\",\r\n      \"type\": \"string\",\r\n      \"enum\": [\r\n        \"instagram\",\r\n        \"facebook\"\r\n      ],\r\n      \"required\": true\r\n    },\r\n    \"advertiser_name\": {\r\n      \"title\": \"광고주명\",\r\n      \"description\": \"광고주명을 입력하세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": true\r\n    },\r\n    \"main_message\": {\r\n      \"title\": \"메인 description\",\r\n      \"description\": \"상단 메인 영역 description을 입력하세요.\",\r\n      \"type\": \"trix_editor\",\r\n      \"required\": true\r\n    },\r\n    \"step1_guide_message\": {\r\n      \"title\": \"step1 가이드 메세지\",\r\n      \"description\": \"step1 영역에 노출될 가이드 문구를 입력하세요.(미입력시 기본 문구 적용)\",\r\n      \"type\": \"trix_editor\",\r\n      \"required\": false\r\n    },\r\n    \"recognization_type\": {\r\n      \"title\": \"포스팅 타입\",\r\n      \"description\": \"포스팅 타입을 선택해 주세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": true,\r\n      \"enum\": [\r\n        \"download\",\r\n        \"photo\",\r\n        \"capture\",\r\n        \"video\",\r\n        \"normal_event\"\r\n      ]\r\n    },\r\n    \"step1_image\": {\r\n      \"title\": \"step1 영역 이미지\",\r\n      \"description\": \"step1 영역 이미지를 등록해주세요.\",\r\n      \"type\": \"ad_detail_image\",\r\n      \"origin_format\": true\r\n    },\r\n    \"step1_video\": {\r\n      \"title\": \"step1 영역 영상\",\r\n      \"description\": \"step1 영역 영상을 등록해주세요.\",\r\n      \"type\": \"ad_detail_video\",\r\n      \"origin_format\": true\r\n    },\r\n    \"step1_button_link\": {\r\n      \"title\": \"step1 버튼 링크\",\r\n      \"description\": \"링크를 입력해 주세요.(웹링크 or 앱링크)\",\r\n      \"type\": \"string\"\r\n    },\r\n    \"sns_hash_tag\": {\r\n      \"title\": \"공통 해시태그\",\r\n      \"description\": \"검증할 공통 해시태그 내용을 콤마로 구분하여 입력 하세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"vision_realize_logo\": {\r\n      \"title\": \"검증 로고\",\r\n      \"description\": \"검증할 로고를 입력 하세요.(미입력시 체크 X)\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"vision_realize_hash_tag\": {\r\n      \"title\": \"검증 해시태그 조건\",\r\n      \"description\": \"검증할 해시태그 조건을 입력 하세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": false\r\n    },\r\n    \"step3_guide_message\": {\r\n      \"title\": \"step3 가이드 메세지\",\r\n      \"description\": \"앱실행 및 예시이미지 영역에 노출될 가이드 문구를 입력하세요.(미입력시 기본 문구 적용)\",\r\n      \"type\": \"trix_editor\",\r\n      \"required\": false\r\n    },\r\n    \"app_button_message\": {\r\n      \"title\": \"앱실행 버튼 메세지\",\r\n      \"description\": \"앱실행 버튼에 표기될 메세지를 입력 하세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": true\r\n    },\r\n    \"app_button_link\": {\r\n      \"title\": \"앱실행 link\",\r\n      \"description\": \"앱실행 버튼에 연결될 link를 입력 하세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": true\r\n    },\r\n    \"vision_realize_example_image\": {\r\n      \"title\": \"이미지 인식 예시 이미지\",\r\n      \"description\": \"이미지 인식에 예시로 사용할 이미지를 등록해주세요.\",\r\n      \"type\": \"ad_detail_image\",\r\n      \"origin_format\": true,\r\n      \"required\": false\r\n    },\r\n         \"secondary_action_enabled\": {\r\n           \"title\": \"2차 액션 팝업 사용\",\r\n           \"description\": \"2차 액션 팝업 사용 여부를 선택해주세요.\",\r\n           \"type\": \"boolean\",\r\n           \"required\": false\r\n         },\r\n         \"secondary_action_image_url\": {\r\n           \"title\": \"2차 액션 팝업 이미지\",\r\n           \"description\": \"2차 액션 팝업 이미지를 입력해주세요.\",\r\n           \"type\": \"ad_detail_image\",\r\n           \"required\": false,\r\n           \"origin_format\": true\r\n         },\r\n         \"secondary_action_title\": {\r\n           \"title\": \"2차 액션 팝업 타이틀\",\r\n           \"description\": \"2차 액션 팝업 타이틀을 입력해주세요.\",\r\n           \"type\": \"string\",\r\n           \"required\": false\r\n         },\r\n         \"secondary_action_button_name\": {\r\n           \"title\": \"2차 액션 팝업 액션 버튼명\",\r\n           \"description\": \"2차 액션 팝업 액션 버튼명을 입력해주세요.\",\r\n           \"type\": \"string\",\r\n           \"required\": false\r\n         },\r\n         \"secondary_action_landing_url\": {\r\n           \"title\": \"2차 액션 팝업 랜딩 URL\",\r\n           \"description\": \"2차 액션 팝업 랜딩 URL을 입력해주세요.\",\r\n           \"type\": \"string\",\r\n           \"required\": false\r\n         }\r\n  }\r\n}",
+    "filter_json": "{}",
+    "created_at": "2020-02-17 11:12:32",
+    "updated_at": "2021-11-01 15:43:13"
+  },
+  {
+    "id": 9,
+    "code": "cpc",
+    "name": "CPC",
+    "description": "클릭 시 적립요청을 하는 광고",
+    "component_json": "{\r\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\r\n  \"type\": \"object\",\r\n  \"properties\": {\r\n    \"boosting_ad_id\": {\r\n      \"title\": \"부스팅 광고 ID\",\r\n      \"description\": \"CPC 완료 처리 후 참여 처리할 상위 광고 ID 를 입력하세요. (CPA S2S 광고만 가능)\",\r\n      \"type\": \"integer\",\r\n      \"required\": false\r\n    },\r\n\"complete_delay_time\": {\r\n      \"title\": \"적립 지연 시간 (초)\",\r\n      \"description\": \"지연 적립 시간을 초 단위로 입력하세요. 최대 60초까지 설정할 수 있습니다.\",\r\n      \"type\": \"integer\",\r\n      \"required\": false,\r\n      \"maximum\": 60,\r\n      \"minimum\": 1\r\n    }\r\n  }\r\n}\r\n",
+    "filter_json": "{}",
+    "created_at": "2020-08-31 18:01:20",
+    "updated_at": "2025-06-11 20:26:19"
+  },
+  {
+    "id": 10,
+    "code": "cpc_accumulate",
+    "name": "CPC 누적형",
+    "description": "참여 횟수 누적 달성시 리워드를 적립해주는 cpc 광고",
+    "component_json": "{\r\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\r\n  \"type\": \"object\",\r\n  \"properties\": {\r\n    \"participate_type\": {\r\n      \"title\": \"참여 타입\",\r\n      \"description\": \"광고 참여 타입\",\r\n      \"type\": \"string\",\r\n      \"enum\": [\r\n        \"continuity\",\r\n        \"all_count\"\r\n      ],\r\n      \"required\": true\r\n    },\r\n    \"all_participate_days\": {\r\n      \"title\": \"참여 인정 전체 횟수\",\r\n      \"description\": \"광고 참여 인정 전체 횟수 (연속형 : 필요 참여 횟수와 같음, 총 횟수형: 총 일자)\",\r\n      \"type\": \"string\",\r\n      \"required\": true\r\n    },\r\n    \"require_participate_count\": {\r\n      \"title\": \"필요 참여 횟수\",\r\n      \"description\": \"광고 참여 완료 필요 횟수 (연속형 : 연속일자, 총 횟수형: 횟수)\",\r\n      \"type\": \"string\",\r\n      \"required\": true\r\n    },\r\n    \"allow_new_participate\": {\r\n      \"title\": \"신규 참여 허용 여부\",\r\n      \"description\": \"신규 광고 참여 허용 여부\",\r\n      \"type\": \"string\",\r\n      \"enum\": [\r\n        \"on\",\r\n        \"off\"\r\n      ],\r\n      \"required\": true\r\n    },\r\n    \"boosting_ad_id\": {\r\n      \"title\": \"부스팅 광고 ID\",\r\n      \"description\": \"CPC 완료 처리 후 참여 처리할 상위 광고 ID 를 입력하세요. (CPA S2S 광고만 가능)\",\r\n      \"type\": \"integer\",\r\n      \"required\": false\r\n    },\r\n    \"complete_delay_time\": {\r\n      \"title\": \"적립 지연 시간 (초)\",\r\n      \"description\": \"지연 적립시 적용할 시간(초)를 입력하세요.(최대 5초까지 가능)\",\r\n      \"type\": \"integer\",\r\n      \"required\": false,\r\n      \"maximum\": 5,\r\n      \"minimum\": 1\r\n    }\r\n  }\r\n}\r\n",
+    "filter_json": "{}",
+    "created_at": "2020-10-07 20:35:05",
+    "updated_at": "2021-09-08 17:17:28"
+  },
+  {
+    "id": 11,
+    "code": "cpa_s2s_accumulate",
+    "name": "CPA S2S 누적형",
+    "description": "참여 횟수 누적 달성시 리워드를 적립해주는 s2s 광고",
+    "component_json": "{\r\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\r\n  \"type\": \"object\",\r\n  \"properties\": {\r\n    \"participate_type\": {\r\n      \"title\": \"참여 타입\",\r\n      \"description\": \"광고 참여 타입\",\r\n      \"type\": \"string\",\r\n      \"enum\": [\r\n        \"continuity\",\r\n        \"all_count\"\r\n      ],\r\n      \"required\": true\r\n    },\r\n    \"all_participate_days\": {\r\n      \"title\": \"참여 인정 전체 횟수\",\r\n      \"description\": \"광고 참여 인정 전체 횟수 (연속형 : 필요 참여 횟수와 같음, 총 횟수형: 총 일자)\",\r\n      \"type\": \"string\",\r\n      \"required\": true\r\n    },\r\n    \"require_participate_count\": {\r\n      \"title\": \"필요 참여 횟수\",\r\n      \"description\": \"광고 참여 완료 필요 횟수 (연속형 : 연속일자, 총 횟수형: 횟수)\",\r\n      \"type\": \"string\",\r\n      \"required\": true\r\n    },\r\n    \"allow_new_participate\": {\r\n      \"title\": \"신규 참여 허용 여부\",\r\n      \"description\": \"신규 광고 참여 허용 여부\",\r\n      \"type\": \"string\",\r\n      \"enum\": [\r\n        \"on\",\r\n        \"off\"\r\n      ],\r\n      \"required\": true\r\n    }\r\n  }\r\n}\r\n",
+    "filter_json": "{}",
+    "created_at": "2020-10-07 20:35:05",
+    "updated_at": "2022-11-18 16:46:34"
+  },
+  {
+    "id": 12,
+    "code": "cpa_coupon",
+    "name": "CPA COUPON",
+    "description": "오퍼월에서 발급한 쿠폰을 매체를 통해 등록 시 리워드를 지급하는 광고 (매체에서 직접 지급)",
+    "component_json": "{}",
+    "filter_json": "{}",
+    "created_at": "2020-12-21 11:36:04",
+    "updated_at": "2020-12-21 11:36:04"
+  },
+  {
+    "id": 13,
+    "code": "cpa_tracker_accumulate",
+    "name": "CPA TRACKER 누적형",
+    "description": "참여 횟수 누적 달성시 리워드를 적립해주는 cpa_tracker 광고",
+    "component_json": "{\r\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\r\n  \"type\": \"object\",\r\n  \"properties\": {\r\n    \"participate_type\": {\r\n      \"title\": \"참여 타입\",\r\n      \"description\": \"광고 참여 타입\",\r\n      \"type\": \"string\",\r\n      \"enum\": [\r\n        \"continuity\",\r\n        \"all_count\"\r\n      ],\r\n      \"required\": true\r\n    },\r\n    \"all_participate_days\": {\r\n      \"title\": \"참여 인정 전체 횟수\",\r\n      \"description\": \"광고 참여 인정 전체 횟수 (연속형 : 필요 참여 횟수와 같음, 총 횟수형: 총 일자)\",\r\n      \"type\": \"string\",\r\n      \"required\": true\r\n    },\r\n    \"require_participate_count\": {\r\n      \"title\": \"필요 참여 횟수\",\r\n      \"description\": \"광고 참여 완료 필요 횟수 (연속형 : 연속일자, 총 횟수형: 횟수)\",\r\n      \"type\": \"string\",\r\n      \"required\": true\r\n    },\r\n    \"allow_new_participate\": {\r\n      \"title\": \"신규 참여 허용 여부\",\r\n      \"description\": \"신규 광고 참여 허용 여부\",\r\n      \"type\": \"string\",\r\n      \"enum\": [\r\n        \"on\",\r\n        \"off\"\r\n      ],\r\n      \"required\": true\r\n    },\r\n    \"complete_event\": {\r\n      \"title\": \"완료 이벤트 이름\",\r\n      \"description\": \"광고주로부터 전달받은 완료 포스백 이벤트 이름을 입력 하세요(ex: install)\",\r\n      \"type\": \"string\",\r\n      \"required\": true\r\n    },\r\n    \"event_parameters\": {\r\n      \"type\": \"array\",\r\n      \"title\": \"완료 이벤트 조건\",\r\n      \"uniqueItems\": true,\r\n      \"items\": {\r\n        \"description\": \"멀티 이벤트에 해당하는 조건 추가\",\r\n        \"type\": \"object\",\r\n        \"properties\": {\r\n          \"event_type\": {\r\n            \"title\": \"이벤트 타입\",\r\n            \"required\": true,\r\n            \"type\": \"string\",\r\n            \"enum\": [\r\n              \"value\",\r\n              \"range\"\r\n            ]\r\n          },\r\n          \"key\": {\r\n            \"type\": \"string\",\r\n            \"title\": \"이벤트 이름\",\r\n            \"description\": \"적립 받을 이벤트 명\",\r\n            \"required\": true\r\n          },\r\n          \"value\": {\r\n            \"type\": \"object\",\r\n            \"properties\": {\r\n              \"value\": {\r\n                \"type\": \"string\",\r\n                \"title\": \"value\"\r\n              },\r\n              \"from\": {\r\n                \"type\": \"string\",\r\n                \"title\": \"from\"\r\n              },\r\n              \"to\": {\r\n                \"type\": \"string\",\r\n                \"title\": \"to\"\r\n              }\r\n            }\r\n          }\r\n        }\r\n      }\r\n    }\r\n  }\r\n}\r\n",
+    "filter_json": "{}",
+    "created_at": "2021-06-09 13:59:45",
+    "updated_at": "2022-11-18 16:46:39"
+  },
+  {
+    "id": 14,
+    "code": "cpm",
+    "name": "CPM",
+    "description": "노출 횟수 기준(1000회)으로 잡행되는 광고 (단, 클릭시 리워드 지급 & 완료기준 물량 제어도 적용됨)",
+    "component_json": "{\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"total_impression_cap\": {\n      \"title\": \"총 노출물량\",\n      \"description\": \"노출기준 총 물량을 입력하세요. (CPM 광고만 가능)\",\n      \"type\": \"integer\",\n      \"required\": true,\n      \"maximum\": 1000000000000,\n      \"minimum\": 1\n    },\n    \"complete_delay_time\": {\n      \"title\": \"적립 지연 시간 (초)\",\n      \"description\": \"지연 적립시 적용할 시간(초)를 입력하세요.(최대 5초까지 가능)\",\n      \"type\": \"integer\",\n      \"required\": false,\n      \"maximum\": 5,\n      \"minimum\": 1\n    }\n  }\n}\n",
+    "filter_json": "{}",
+    "created_at": "2023-01-11 16:17:56",
+    "updated_at": "2023-01-11 16:17:56"
+  },
+  {
+    "id": 15,
+    "code": "kakaotalk_channel_add",
+    "name": "카카오톡 채널추가 (카카오톡 only)",
+    "description": "API 를 통해 유저의 카카오 채널을 추가하고 성공하면 리워드를 적립해주는 광고 (카카오톡 매체 전용 상품)",
+    "component_json": "{\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"kakaotalk_channel_public_id\": {\n      \"title\": \"카카오톡 채널 public id\",\n      \"description\": \"카카오톡 채널 public id 를 입력하세요.\",\n      \"type\": \"string\",\n      \"required\": true\n    }\n  }\n}\n",
+    "filter_json": "{}",
+    "created_at": "2023-03-08 13:15:35",
+    "updated_at": "2023-03-08 13:15:35"
+  },
+  {
+    "id": 16,
+    "code": "naverpay_smartstore_cps",
+    "name": "네이버페이 스마트스토어 CPS (네이버페이 only)",
+    "description": "스마트스토어 구매형 광고. CPA_S2S 와 동일하게 집행되며, 참여 정보를 네이버페이에 전달하는 연동 추가됨. (네이버페이 매체 전용 상품)",
+    "component_json": "{\r\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\r\n  \"type\": \"object\",\r\n  \"properties\": {\r\n    \"min_payment_amount\": {\r\n      \"title\": \"최소 결제 금액\",\r\n      \"description\": \"리워드 지급/회수 기준에 사용될 최소 결제 금액을 입력하세요. (고정 리워드 광고 전용이며 취소 포스트백 연동 광고주인 경우만 사용 가능)\",\r\n      \"type\": \"string\",\r\n      \"format\": \"number_with_comma\",\r\n      \"required\": true\r\n    }\r\n  }\r\n}",
+    "filter_json": "{}",
+    "created_at": "2023-11-10 12:12:49",
+    "updated_at": "2023-11-14 15:59:33"
+  },
+  {
+    "id": 17,
+    "code": "cookie_oven_smartstore_cps",
+    "name": "쿠키오븐 스마트스토어 CPS (쿠키오븐 only)",
+    "description": "스마트스토어 구매형 광고. CPA_S2S 와 동일하게 집행되며, 참여 정보를 쿠키오븐에 전달하는 연동 추가됨. (쿠키오븐 매체 전용 상품)",
+    "component_json": "{\r\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\r\n  \"type\": \"object\",\r\n  \"properties\": {\r\n    \"min_payment_amount\": {\r\n      \"title\": \"최소 결제 금액\",\r\n      \"description\": \"리워드 지급/회수 기준에 사용될 최소 결제 금액을 입력하세요. (고정 리워드 광고 전용이며 취소 포스트백 연동 광고주인 경우만 사용 가능)\",\r\n      \"type\": \"string\",\r\n      \"format\": \"number_with_comma\",\r\n      \"required\": true\r\n    },\r\n    \"partner_advertiser_type\": {\r\n      \"title\": \"파트너 광고주 타입\",\r\n      \"description\": \"리워드 지급/회수 기준에 사용될 파트너 광고주 타입을 입력하세요.\",\r\n      \"type\": \"string\",\r\n      \"enum\": [\r\n        { \"label\": \"도착보장 상품 구매 (ARRIVAL_GUARANTEE)\", \"value\": \"ARRIVAL_GUARANTEE\" },\r\n        { \"label\": \"스스 특정판매자 상품 구매 (NORMAL_SELLER)\", \"value\": \"NORMAL_SELLER\" },\r\n        { \"label\": \"도착보장 내 특정 판매자 상품 구매 (ARRIVAL_GUARANTEE_SELLER)\", \"value\": \"ARRIVAL_GUARANTEE_SELLER\" },\r\n        { \"label\": \"특정판매자 특정상품 구매 (NORMAL_SELLER_PRODUCT)\", \"value\": \"NORMAL_SELLER_PRODUCT\" },\r\n        { \"label\": \"스스 전체 상품 구매 (NORMAL_ALL)\", \"value\": \"NORMAL_ALL\" }\r\n      ],\r\n      \"required\": true,\r\n      \"maxLength\": 100\r\n    },\r\n    \"partner_advertiser_id\": {\r\n      \"title\": \"파트너 광고주 id\",\r\n      \"description\": \"리워드 지급/회수 기준에 사용될 파트너 광고주 id를 입력하세요.\",\r\n      \"type\": \"string\",\r\n      \"required\": false,\r\n      \"maxLength\": 100\r\n    },\r\n    \"participation_path_type\": {\r\n      \"title\": \"참여 경로 유형(app/web)\",\r\n      \"description\": \"리워드 지급 기준에 사용될 참여 경로 유형을 선택해주세요. 유형 설정시, 해당 유형에서의 유저 구매건에 대해서만 리워드 지급됩니다.\",\r\n      \"type\": \"string\",\r\n      \"enum\": [\r\n        { \"label\": \"미설정(none)\", \"value\": \"none\" },\r\n        { \"label\": \"앱(app)\", \"value\": \"app\" },\r\n        { \"label\": \"웹(web)\", \"value\": \"web\" }\r\n      ],\r\n      \"required\": true\r\n    }\r\n  }\r\n}\r\n",
+    "filter_json": "{}",
+    "created_at": "2023-11-30 11:42:49",
+    "updated_at": "2025-02-11 14:22:39"
+  },
+  {
+    "id": 18,
+    "code": "aog_multi_reward",
+    "name": "멀티리워드",
+    "description": "하나의 광고에서 리워드를 단계적으로 지급받을 수 있는 광고타입. 광고 노출여부 및 우선순위를 제어하기 위한 용도로만 사용하고, 그 외 참여/적립/CS 등의 동작과 광고 에셋은 애디슨 글로벌 오퍼월에서 처리 또는 SDK에서 치환하여 사용. (SDK레벨에서의 연동)",
+    "component_json": "{\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"aog_campaign_id\": {\n      \"title\": \"애디슨 글로벌 캠페인 ID\",\n      \"description\": \"멀티리워드 광고를 연동할 애디슨 글로벌 오퍼월 캠페인 ID를 입력하세요.\",\n      \"type\": \"integer\",\n      \"required\": true\n    }\n  }\n}\n",
+    "filter_json": "{}",
+    "created_at": "2024-07-09 18:11:21",
+    "updated_at": "2024-07-09 18:11:21"
+  },
+  {
+    "id": 19,
+    "code": "naverpay_pointguarantee_cps_boosting",
+    "name": "네이버페이 포인트보장 CPS BOOSTING",
+    "description": "광고 참여 통해 네이버페이 포인트보장 페이지 진입 후, 이어서 참여한 네이버페이 스마트스토어 CPS 광고 캠페인 완료시 리워드를 지급하는 광고",
+    "component_json": "{\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n  }\n}\n",
+    "filter_json": "{}",
+    "created_at": "2025-04-02 17:19:16",
+    "updated_at": "2025-04-02 17:19:16"
+  },
+  {
+    "id": 20,
+    "code": "neptune_video",
+    "name": "넵튠 동영상 광고",
+    "description": "넵튠의 광고 페이지로 이동한 후 동영상 광고 시청완료, 배너 노출등의 조건에 따라 리워드를 지급하는 광고",
+    "component_json": "{\r\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\r\n  \"type\": \"object\",\r\n  \"properties\": {\r\n    \"landing_type\": {\r\n      \"title\": \"랜딩 타입\",\r\n      \"description\": \"랜딩 타입을 선택해주세요. SDK 3.7.8 부터 동작하며 미호환 SDK 에서는 기본값으로만 동작합니다.\",\r\n      \"type\": \"integer\",\r\n      \"enum\": [\r\n        { \"label\": \"인앱브라우저(기본값)\", \"value\": 1 },\r\n        { \"label\": \"외부 URL 요청\", \"value\": 0 }\r\n      ],\r\n      \"required\": true\r\n    },\r\n    \"video_ad_on_grant_cost\": {\r\n      \"title\": \"동영상 광고 시청 완료 단가\",\r\n      \"description\": \"동영상 광고를 시청 완료하여 리워드를 받을 수 있을 때 사용할 단가를 입력해 주세요. (0으로 입력한 경우 완료 처리되지 않습니다.)\",\r\n      \"type\": \"integer\",\r\n      \"required\": true\r\n    },\r\n    \"video_ad_close_button_click_cost\": {\r\n      \"title\": \"동영상 광고 닫기 클릭 단가\",\r\n      \"description\": \"동영상 광고를 보고 닫기 버튼을 누를 때 사용할 단가를 입력해 주세요. (0으로 입력한 경우 완료 처리되지 않습니다.)\",\r\n      \"type\": \"integer\",\r\n      \"required\": true\r\n    },\r\n    \"banner_ad_impression_cost\": {\r\n      \"title\": \"배너 광고 노출 단가\",\r\n      \"description\": \"배너 노출 시 사용할 광고 단가를 입력해 주세요. (0으로 입력한 경우 완료 처리되지 않습니다.)\",\r\n      \"type\": \"integer\",\r\n      \"required\": true\r\n    },\r\n    \"banner_ad_click_cost\": {\r\n      \"title\": \"배너 광고 클릭 단가\",\r\n      \"description\": \"배너 광고 클릭 시 사용할 광고 단가를 입력해 주세요. (0으로 입력한 경우 완료 처리되지 않습니다.)\",\r\n      \"type\": \"integer\",\r\n      \"required\": true\r\n    },\r\n    \"no_ad_cost\": {\r\n      \"title\": \"광고 없음 단가\",\r\n      \"description\": \"동영상, 배너 광고 모두 없을 때 사용할 단가를 입력해 주세요. (0으로 입력한 경우 완료 처리되지 않습니다.)\",\r\n      \"type\": \"integer\",\r\n      \"required\": true\r\n    }\r\n  }\r\n}\r\n",
+    "filter_json": "{}",
+    "created_at": "2025-08-05 18:52:45",
+    "updated_at": "2025-09-04 13:24:54"
+  },
+  {
+    "id": 21,
+    "code": "navershopping_affiliate",
+    "name": "네이버쇼핑 어필리에이트",
+    "description": "광고 참여를 통해 네이버쇼핑에서 상품 구매 시 사용자에게 리워드를 지급하지 않는 광고 (외부매체 별도 정산 또는 부스팅 광고에 활용)",
+    "component_json": "{\r\n  \"$schema\": \"http://json-schema.org/draft-03/schema#\",\r\n  \"type\": \"object\",\r\n  \"properties\": {\r\n    \"min_payment_amount\": {\r\n      \"title\": \"최소 결제 금액\",\r\n      \"description\": \"완전 정률 지급 방식 호환을 위하여 1원으로 고정됩니다.\",\r\n      \"type\": \"integer\",\r\n      \"required\": true,\r\n      \"default\": 1,\r\n      \"minimum\": 1,\r\n      \"maximum\": 1000000\r\n    }\r\n  }\r\n}\r\n",
+    "filter_json": "{}",
+    "created_at": "2025-08-28 16:15:47",
+    "updated_at": "2025-08-28 16:34:08"
+  }
+]

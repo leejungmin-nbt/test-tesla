@@ -1,0 +1,352 @@
+[
+  {
+    "id": 3,
+    "name": "내부 포스트백 연동",
+    "token": "tMZk8yzNGTGHZ5KEZPYN3S57",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": "내부 포스트백 연동용 토큰입니다.",
+    "created_at": "2019-05-03 17:18:22",
+    "updated_at": "2024-08-30 13:32:44"
+  },
+  {
+    "id": 4,
+    "name": "CPS",
+    "token": "nAkLXLhNTPycBY5YJ7PfbbNH",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2019-11-28 19:12:58",
+    "updated_at": "2019-11-28 19:12:58"
+  },
+  {
+    "id": 5,
+    "name": "네이버 베타앱",
+    "token": "Rh7EcC4boDRSLqMiDXizwgs6",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2020-01-30 11:15:50",
+    "updated_at": "2020-01-30 11:17:56"
+  },
+  {
+    "id": 6,
+    "name": "띵스플로우",
+    "token": "noFdWSxeGsy5Z8DcnHfFQaSo",
+    "ip_permission_vars": "{\"ip_permissions\":[{\"start_ip\":\"13.124.168.157\",\"end_ip\":\"\"},{\"start_ip\":\"52.78.88.151\",\"end_ip\":\"\"}]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2020-08-05 13:30:37",
+    "updated_at": "2020-08-05 13:30:37"
+  },
+  {
+    "id": 7,
+    "name": "스마트스토어",
+    "token": "5Pdr6Zzo4CAgJu1UpgkoxFi8",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2021-02-19 18:21:53",
+    "updated_at": "2021-02-19 18:51:01"
+  },
+  {
+    "id": 8,
+    "name": "타입폼 테스트",
+    "token": "icZygrjqpRehCxVWgSiq4vCq",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2021-07-19 13:26:00",
+    "updated_at": "2021-07-19 13:26:00"
+  },
+  {
+    "id": 9,
+    "name": "카울리",
+    "token": "7yohvMgF2eF1F6Z4MRqDvxz2",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2022-09-29 15:12:31",
+    "updated_at": "2022-09-29 15:12:31"
+  },
+  {
+    "id": 10,
+    "name": "스마트스토어_알림",
+    "token": "EYccpaU5WYY3v66zMnWHqAYu",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2022-10-11 15:48:19",
+    "updated_at": "2022-10-11 15:48:19"
+  },
+  {
+    "id": 11,
+    "name": "달링유앤아이_스토어1",
+    "token": "vQiX5zGPBgA68hNHeLrLGQPt",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2022-10-20 12:32:04",
+    "updated_at": "2022-10-20 12:32:04"
+  },
+  {
+    "id": 12,
+    "name": "임지수테스트_스토어2",
+    "token": "J9yZojZiQvbssKC3TdsxmbxS",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2022-10-20 12:32:10",
+    "updated_at": "2022-10-20 12:32:10"
+  },
+  {
+    "id": 13,
+    "name": "구찌_브랜드",
+    "token": "4FsRXpa9D2LyrkVDFm9ARHkH",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2022-10-20 12:32:14",
+    "updated_at": "2022-10-20 12:32:14"
+  },
+  {
+    "id": 14,
+    "name": "쇼핑라이브_알림",
+    "token": "3Stmxiuap8xf4bejBiZnVCnA",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2023-01-09 13:44:34",
+    "updated_at": "2023-01-09 13:44:34"
+  },
+  {
+    "id": 15,
+    "name": "NF_사전예약",
+    "token": "Yxc1FoZBFmrrEZTmuNxd3cKb",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2023-05-12 10:19:07",
+    "updated_at": "2023-05-12 10:19:07"
+  },
+  {
+    "id": 16,
+    "name": "NF_라운지 가입알림",
+    "token": "fyQi9vYXPx3vpED26LyM47iB",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2023-05-12 10:19:20",
+    "updated_at": "2023-05-12 10:22:35"
+  },
+  {
+    "id": 17,
+    "name": "도착보장 브랜드펀딩 (NF)",
+    "token": "GJPd4vv6DQDNGVLmcmY3r6HS",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2023-09-07 10:38:33",
+    "updated_at": "2023-09-07 10:38:33"
+  },
+  {
+    "id": 18,
+    "name": "도착보장 플랫폼펀딩 (NF)",
+    "token": "ajZHS5LEoJWtnj7bM5bpM6dg",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2023-09-07 11:11:27",
+    "updated_at": "2023-09-07 11:11:27"
+  },
+  {
+    "id": 19,
+    "name": "도착보장 상품구매 (NW)",
+    "token": "t17hrC8cpEudVE1uHEWgSZds",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2023-11-23 11:41:09",
+    "updated_at": "2023-11-23 11:41:20"
+  },
+  {
+    "id": 20,
+    "name": "특정 판매자 상품구매 (NW)",
+    "token": "xkBbuSJsGuRdh4qt7e52haXK",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2023-11-23 11:41:34",
+    "updated_at": "2023-11-23 11:41:34"
+  },
+  {
+    "id": 21,
+    "name": "도착보장_특정 판매자 상품구매 (NW)",
+    "token": "yL6SQ9SyzdwQyjc2TQHuJrpW",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2023-11-28 13:45:56",
+    "updated_at": "2023-11-28 13:45:56"
+  },
+  {
+    "id": 22,
+    "name": "특정 판매자_특정 상품구매 (NW)",
+    "token": "WGnS1qfuUEkjgqnuzzNXsD5N",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2023-11-28 13:46:05",
+    "updated_at": "2023-11-28 13:46:05"
+  },
+  {
+    "id": 23,
+    "name": "도착보장 상품펀딩 (NF)",
+    "token": "UZtKaHCisENxxnWh97nL8nRf",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2023-12-29 11:41:03",
+    "updated_at": "2023-12-29 11:41:03"
+  },
+  {
+    "id": 24,
+    "name": "스스 전체 상품 구매 (NW)",
+    "token": "BhGttSQnefDAdN2D7VHeKMwz",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2024-03-12 11:49:10",
+    "updated_at": "2024-03-12 11:49:10"
+  },
+  {
+    "id": 25,
+    "name": "일반상품 플랫폼펀딩 (NF)",
+    "token": "M7ePQCYgstdT6cVQJnCkpUe9",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2024-03-25 11:45:33",
+    "updated_at": "2024-03-25 11:45:33"
+  },
+  {
+    "id": 26,
+    "name": "일반상품 브랜드펀딩 (NF)",
+    "token": "zD8nWujVZ7xGJxMtnhkuLfKZ",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2024-03-25 11:45:39",
+    "updated_at": "2024-03-25 11:45:39"
+  },
+  {
+    "id": 27,
+    "name": "일반상품 상품펀딩 (NF)",
+    "token": "uWmujn3GsJAPdF6va1tyFhg5",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2024-03-25 11:45:44",
+    "updated_at": "2024-03-25 11:45:44"
+  },
+  {
+    "id": 28,
+    "name": "O파티_기능테스트",
+    "token": "A6hyrYAy9E4mUTAQsD1Vis9u",
+    "ip_permission_vars": "{\"ip_permissions\":[{\"start_ip\":\"11.11.11.11\",\"end_ip\":\"\"}]}",
+    "enable_block_by_ip": 1,
+    "memo": null,
+    "created_at": "2024-03-26 12:58:36",
+    "updated_at": "2024-03-26 12:58:53"
+  },
+  {
+    "id": 29,
+    "name": "일반_플랫폼펀딩_상품타겟 (NF)",
+    "token": "K561zD2i9fL4JMGowgnKqJ92",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2024-04-22 15:37:49",
+    "updated_at": "2024-04-22 15:37:49"
+  },
+  {
+    "id": 30,
+    "name": "도착보장_플랫폼펀딩_상품타겟 (NF)",
+    "token": "j2VCD86a99rX5LE5xUKg4cET",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2024-04-22 15:37:58",
+    "updated_at": "2024-04-22 15:37:58"
+  },
+  {
+    "id": 31,
+    "name": "디지털콘텐츠_플랫폼펀딩 (NF)",
+    "token": "SYXc9h8bstKtaQZBKATHsWZR",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2024-04-22 15:38:05",
+    "updated_at": "2024-04-22 15:38:05"
+  },
+  {
+    "id": 32,
+    "name": "디지털콘텐츠_플랫폼펀딩_상품타겟 (NF)",
+    "token": "mHvd8EfEHFWUR19fxUzk39rF",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": null,
+    "created_at": "2024-04-22 15:38:10",
+    "updated_at": "2024-04-22 15:38:10"
+  },
+  {
+    "id": 33,
+    "name": "골드 커머스 (서버연동)",
+    "token": "JqeZHp9tcsE8FCTJYtHHnhBr",
+    "ip_permission_vars": "{\"ip_permissions\":[{\"start_ip\":\"49.247.44.213\",\"end_ip\":\"\"},{\"start_ip\":\"49.247.175.158\",\"end_ip\":\"\"}]}",
+    "enable_block_by_ip": 1,
+    "memo": null,
+    "created_at": "2024-06-17 11:35:53",
+    "updated_at": "2024-06-17 11:35:53"
+  },
+  {
+    "id": 34,
+    "name": "캐시허브 SMB",
+    "token": "NYJtVNjbQ9mq2gbPJLyxu1Bw",
+    "ip_permission_vars": "{\"ip_permissions\":[{\"start_ip\":\"34.64.166.187\",\"end_ip\":\"\"}]}",
+    "enable_block_by_ip": 1,
+    "memo": "등록자 이재원",
+    "created_at": "2025-01-14 12:39:11",
+    "updated_at": "2025-01-14 12:39:11"
+  },
+  {
+    "id": 35,
+    "name": "쇼핑앱_일반_플랫폼펀딩 (NF)",
+    "token": "A7aAPmDL4Y1tAkYp1xfPQiiu",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": "",
+    "created_at": "2025-02-12 13:55:15",
+    "updated_at": "2025-02-12 13:55:15"
+  },
+  {
+    "id": 36,
+    "name": "쇼핑앱_일반_플랫폼펀딩_상품타겟 (NF)",
+    "token": "pwhnAPd6e491muRrGvrqrXu8",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": "",
+    "created_at": "2025-02-12 13:55:20",
+    "updated_at": "2025-02-12 13:55:20"
+  },
+  {
+    "id": 37,
+    "name": "테스트 광고주 토큰",
+    "token": "DFbish68QLuo92fPUsMuGoje",
+    "ip_permission_vars": "{\"ip_permissions\":[]}",
+    "enable_block_by_ip": 0,
+    "memo": "",
+    "created_at": "2025-08-26 17:33:43",
+    "updated_at": "2025-08-26 17:33:43"
+  }
+]

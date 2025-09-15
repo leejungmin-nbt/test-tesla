@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "name": "네이버 웹툰",
+    "description": "네이버 웹툰 플랫폼"
+  },
+  {
+    "id": 2,
+    "name": "카카오 웹툰",
+    "description": "카카오 웹툰 플랫폼"
+  },
+  {
+    "id": 3,
+    "name": "레진코믹스",
+    "description": "레진코믹스 플랫폼"
+  },
+  {
+    "id": 4,
+    "name": "툰코",
+    "description": "툰코 플랫폼"
+  },
+  {
+    "id": 5,
+    "name": "봄툰",
+    "description": "봄툰 플랫폼"
+  },
+  {
+    "id": 6,
+    "name": "탑툰",
+    "description": "탑툰 플랫폼"
+  },
+  {
+    "id": 7,
+    "name": "미스터블루",
+    "description": "미스터블루 플랫폼"
+  },
+  {
+    "id": 8,
+    "name": "야툰",
+    "description": "야툰 플랫폼"
+  },
+  {
+    "id": 9,
+    "name": "코미코",
+    "description": "코미코 플랫폼"
+  },
+  {
+    "id": 10,
+    "name": "네이버 시리즈",
+    "description": "네이버 시리즈 플랫폼"
+  }
+]

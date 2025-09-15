@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "name": "행복한광고주",
+    "email": "advertiser@happy.com",
+    "logo": null,
+    "created_at": "2018-10-26 14:17:59",
+    "updated_at": "2022-12-14 16:09:16"
+  },
+  {
+    "id": 2,
+    "name": "케이뱅크",
+    "email": "lee0310@kbanknow.com",
+    "logo": null,
+    "created_at": "2020-07-09 11:34:05",
+    "updated_at": "2020-07-09 11:34:05"
+  },
+  {
+    "id": 3,
+    "name": "마켓C",
+    "email": "sales@nbt.com",
+    "logo": null,
+    "created_at": "2021-03-23 11:29:02",
+    "updated_at": "2021-03-23 11:29:02"
+  },
+  {
+    "id": 4,
+    "name": "A테스트",
+    "email": "G@G",
+    "logo": null,
+    "created_at": "2022-09-06 18:10:14",
+    "updated_at": "2023-05-31 17:07:06"
+  },
+  {
+    "id": 5,
+    "name": "삼성전자",
+    "email": "samsung@samsung.com",
+    "logo": "bce70320ca.webp",
+    "created_at": "2023-04-17 12:38:11",
+    "updated_at": "2023-04-17 12:38:11"
+  },
+  {
+    "id": 6,
+    "name": "O파티 테스트 광고주",
+    "email": "woo.injoon@nbt.com",
+    "logo": "09758fcced.webp",
+    "created_at": "2023-07-31 18:05:44",
+    "updated_at": "2023-07-31 18:05:44"
+  },
+  {
+    "id": 9,
+    "name": "테스트 광고주",
+    "email": "sales@nbt.com",
+    "logo": null,
+    "created_at": "2025-08-26 17:32:06",
+    "updated_at": "2025-08-26 17:32:06"
+  }
+]

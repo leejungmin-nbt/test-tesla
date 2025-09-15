@@ -1,0 +1,106 @@
+[
+  {
+    "id": 1,
+    "code": "CPI",
+    "name": "CPI",
+    "description": "Cost Per Install",
+    "created_at": "2019-10-24 15:32:00",
+    "updated_at": "2019-10-24 15:32:00"
+  },
+  {
+    "id": 2,
+    "code": "CPE",
+    "name": "CPE",
+    "description": "Cost Per Engagement",
+    "created_at": "2019-10-24 15:32:00",
+    "updated_at": "2019-10-24 15:32:00"
+  },
+  {
+    "id": 3,
+    "code": "CPA_SNS",
+    "name": "CPA_SNS",
+    "description": "SNS 구독",
+    "created_at": "2019-10-24 15:32:00",
+    "updated_at": "2019-10-25 14:46:44"
+  },
+  {
+    "id": 4,
+    "code": "CPA_ADVANCED_RESERVE",
+    "name": "CPA_사전예약",
+    "description": "사전에약",
+    "created_at": "2019-10-24 15:32:00",
+    "updated_at": "2019-10-25 15:01:34"
+  },
+  {
+    "id": 5,
+    "code": "CPA_MEMBERSHIP",
+    "name": "CPA_회원가입",
+    "description": "회원가입",
+    "created_at": "2019-10-24 15:32:00",
+    "updated_at": "2019-10-25 15:01:27"
+  },
+  {
+    "id": 6,
+    "code": "CPA_FINANCE",
+    "name": "CPA_금융",
+    "description": "금융",
+    "created_at": "2019-10-24 15:32:01",
+    "updated_at": "2019-10-25 15:01:20"
+  },
+  {
+    "id": 7,
+    "code": "CPQ",
+    "name": "CPQ",
+    "description": "Cost Per Quiz",
+    "created_at": "2019-10-25 14:47:50",
+    "updated_at": "2019-10-25 14:47:50"
+  },
+  {
+    "id": 8,
+    "code": "CPS",
+    "name": "CPS",
+    "description": "Cost Per Sale",
+    "created_at": "2019-10-25 14:48:00",
+    "updated_at": "2019-10-25 14:48:00"
+  },
+  {
+    "id": 9,
+    "code": "ETC",
+    "name": "기타",
+    "description": "",
+    "created_at": "2019-10-25 14:48:06",
+    "updated_at": "2019-10-25 15:01:10"
+  },
+  {
+    "id": 10,
+    "code": "CPC",
+    "name": "CPC",
+    "description": "",
+    "created_at": "2022-02-16 12:48:44",
+    "updated_at": "2022-02-16 12:48:44"
+  },
+  {
+    "id": 11,
+    "code": "CPM",
+    "name": "CPM",
+    "description": "Cost Per Impression",
+    "created_at": "2023-01-25 16:51:47",
+    "updated_at": "2023-01-25 16:51:47"
+  },
+  {
+    "id": 12,
+    "code": "KAKAOTALK_CHANNEL_ADD",
+    "name": "카카오톡 채널추가 (카카오톡 only)",
+    "description": "카카오톡채널추가 광고 전용 정산타입(카카오톡 매체에만 노출)",
+    "created_at": "2023-03-27 11:13:57",
+    "updated_at": "2023-12-11 11:14:10"
+  },
+  {
+    "id": 13,
+    "code": "NCPC",
+    "name": "NCPC",
+    "description": "None Reward Cost Per Click, DA(None Reward)광고를 CPC로 정산하는 타입",
+    "created_at": "2025-08-05 18:59:59",
+    "updated_at": "2025-08-05 18:59:59"
+  }
+]

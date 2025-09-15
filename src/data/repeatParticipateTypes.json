@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "code": "one_participate",
+    "name": "단일 참여",
+    "desc": "한번 참여하면 추후 재참여 불가",
+    "created_at": "2019-04-15 13:02:48",
+    "updated_at": "2019-04-15 13:02:48"
+  },
+  {
+    "id": 2,
+    "code": "daily_participate",
+    "name": "일일 한번 참여",
+    "desc": "하루에 한번 참여 가능",
+    "created_at": "2019-04-15 13:02:48",
+    "updated_at": "2019-04-15 13:02:48"
+  },
+  {
+    "id": 3,
+    "code": "infinity_participate",
+    "name": "무한 참여",
+    "desc": "여러번 참여 가능",
+    "created_at": "2019-05-02 11:19:51",
+    "updated_at": "2019-05-02 11:19:51"
+  }
+]

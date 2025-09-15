@@ -1,0 +1,376 @@
+{
+  "title": "광고 등록 요청 스키마",
+  "type": "object",
+  "required": [
+    "title",
+    "advertiser_id",
+    "brand",
+    "ad_vendor",
+    "category_id",
+    "advertiser_integration_id",
+    "report_type",
+    "repeat_participate_type_id",
+    "help_request_personal_info_type_ids",
+    "advertiser_cs_manager_emails",
+    "target_cookieoven_publisher_ids",
+    "ad_action_type_id",
+    "target_os",
+    "ad_type_id",
+    "start_at",
+    "end_at",
+    "target_times",
+    "landing_url",
+    "view_assets",
+    "ad_settle_type_id",
+    "cost",
+    "budget",
+    "daily_action_cap",
+    "participate_expired_at",
+    "target_adison_publisher_ids"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "캠페인 제목"
+    },
+    "advertiser_id": {
+      "type": "number",
+      "description": "광고주 ID"
+    },
+    "brand": {
+      "type": "string",
+      "minLength": 1,
+      "description": "브랜드명"
+    },
+    "ad_vendor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "거래처"
+    },
+    "category_id": {
+      "type": "number",
+      "description": "카테고리 ID"
+    },
+    "advertiser_integration_id": {
+      "type": "number",
+      "description": "광고주 통합 ID"
+    },
+    "report_type": {
+      "type": "number",
+      "description": "리포트 타입"
+    },
+    "repeat_participate_type_id": {
+      "type": "number",
+      "description": "재참여 타입 ID"
+    },
+    "help_request_personal_info_type_ids": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 1,
+      "description": "개인정보 수집 항목 ID 배열"
+    },
+    "advertiser_cs_manager_names": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "광고주 CS 매니저 이름 (선택사항)"
+    },
+    "advertiser_cs_manager_emails": {
+      "type": "string",
+      "minLength": 1,
+      "description": "광고주 CS 매니저 이메일"
+    },
+    "target_cookieoven_publisher_ids": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 1,
+      "description": "쿠키오븐 매체 ID 배열"
+    },
+    "ad_action_type_id": {
+      "type": "number",
+      "description": "광고 액션 타입 ID"
+    },
+    "target_os": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "enum": [
+          "Android",
+          "iOS"
+        ]
+      },
+      "minItems": 1,
+      "description": "타겟 OS 배열"
+    },
+    "ad_type_id": {
+      "type": "number",
+      "description": "광고 타입 ID"
+    },
+    "start_at": {
+      "type": "string",
+      "minLength": 1,
+      "description": "광고 시작 시간 (ISO 8601 형식)"
+    },
+    "end_at": {
+      "type": "string",
+      "minLength": 1,
+      "description": "광고 종료 시간 (ISO 8601 형식)"
+    },
+    "target_times": {
+      "type": "object",
+      "required": [
+        "from",
+        "to"
+      ],
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "시작 시간 (HH:MM 형식)"
+        },
+        "to": {
+          "type": "string",
+          "description": "종료 시간 (HH:MM 형식)"
+        }
+      }
+    },
+    "landing_url": {
+      "type": "object",
+      "required": [
+        "default",
+        "android",
+        "ios"
+      ],
+      "properties": {
+        "default": {
+          "type": "string",
+          "pattern": "^(https?://.+)?$"
+        },
+        "android": {
+          "type": "string",
+          "pattern": "^(https?://.+)?$"
+        },
+        "ios": {
+          "type": "string",
+          "pattern": "^(https?://.+)?$"
+        }
+      }
+    },
+    "view_assets": {
+      "type": "object",
+      "required": [
+        "thumbnail_feed",
+        "thumbnail_icon",
+        "title",
+        "subtitle",
+        "detail_image",
+        "navigation_title",
+        "detail_title",
+        "detail_subtitle",
+        "call_to_action",
+        "notice"
+      ],
+      "properties": {
+        "thumbnail_feed": {
+          "type": "string",
+          "format": "uri",
+          "description": "피드 썸네일 이미지 URL"
+        },
+        "thumbnail_icon": {
+          "type": "string",
+          "format": "uri",
+          "description": "아이콘 이미지 URL"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "description": "광고 제목"
+        },
+        "subtitle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "광고 부제목"
+        },
+        "detail_image": {
+          "type": "string",
+          "format": "uri",
+          "description": "상세 이미지 URL"
+        },
+        "navigation_title": {
+          "type": "string",
+          "minLength": 1,
+          "description": "네비게이션 타이틀"
+        },
+        "detail_title": {
+          "type": "string",
+          "minLength": 1,
+          "description": "상세 타이틀"
+        },
+        "detail_subtitle": {
+          "type": "string",
+          "description": "상세 부제목 (선택사항)"
+        },
+        "call_to_action": {
+          "type": "string",
+          "description": "CTA 텍스트 (선택사항)"
+        },
+        "notice": {
+          "type": "string",
+          "minLength": 1,
+          "description": "안내사항"
+        }
+      }
+    },
+    "ad_settle_type_id": {
+      "type": "number",
+      "description": "광고 정산 타입 ID"
+    },
+    "cost": {
+      "type": "number",
+      "description": "단가"
+    },
+    "min_payment_amount": {
+      "type": "number",
+      "description": "최소 지급 금액"
+    },
+    "budget": {
+      "type": "number",
+      "description": "예산"
+    },
+    "daily_action_cap": {
+      "type": "number",
+      "description": "일일 물량 자동 설정"
+    },
+    "delay_term": {
+      "type": "number",
+      "description": "후지급 시간"
+    },
+    "participate_expired_at": {
+      "type": "number",
+      "description": "광고 참여 후 완료 인정 유효기간(일단위)"
+    },
+    "target_genders": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string",
+        "enum": [
+          "남성",
+          "여성",
+          "기타"
+        ]
+      },
+      "description": "타겟 성별 배열 (선택사항)"
+    },
+    "target_ages": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "시작 나이"
+        },
+        "to": {
+          "type": "string",
+          "description": "종료 나이"
+        }
+      },
+      "description": "타겟 나이 범위 (선택사항)"
+    },
+    "target_adison_publisher_ids": {
+      "type": "object",
+      "required": [
+        "mode",
+        "publisher_ids"
+      ],
+      "properties": {
+        "mode": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ALL",
+              "INCLUDE",
+              "EXCLUDE"
+            ]
+          },
+          "minItems": 1
+        },
+        "publisher_ids": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "type": "array",
+                "contains": {
+                  "const": "INCLUDE"
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "publisher_ids": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "type": "array",
+                "contains": {
+                  "const": "EXCLUDE"
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "publisher_ids": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "type": "array",
+                "contains": {
+                  "const": "ALL"
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "publisher_ids": {
+                "minItems": 0
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
