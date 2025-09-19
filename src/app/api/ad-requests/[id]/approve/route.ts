@@ -19,7 +19,7 @@ export async function POST(
         result: response.result,
       })
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       createErrorResponse({
         message: "광고 요청 검수 상태 변경에 실패했습니다.",

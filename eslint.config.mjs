@@ -24,11 +24,7 @@ const eslintConfig = [
     ],
   },
   {
-    files: [
-      "src/app/**/*.{js,jsx,ts,tsx}",
-      "src/layout/**/*.{js,jsx,ts,tsx}",
-      "src/components/**/*.{js,jsx,ts,tsx}",
-    ],
+    files: ["src/**/*.{js,jsx,ts,tsx}"],
     plugins: {
       "better-tailwindcss": betterTailwindcss,
     },
@@ -47,6 +43,9 @@ const eslintConfig = [
           printWidth: 150,
         },
       ],
+
+      // any 타입 사용 허용
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
 ];

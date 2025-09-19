@@ -16,7 +16,7 @@ export async function GET() {
         result,
       })
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       createErrorResponse({
         message: "광고 요청 목록을 가져오는데 실패했습니다.",

@@ -20,7 +20,7 @@ export async function GET(
         result: response.result,
       })
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       createErrorResponse({
         message: "광고 요청 상세 정보를 가져오는데 실패했습니다.",

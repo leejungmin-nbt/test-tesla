@@ -2,12 +2,25 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { clearAllLocalStorage } from "@/utils/localStorage";
+import { toast } from "sonner";
 
 export default function Home() {
   const [shouldThrowError, setShouldThrowError] = useState(false);
 
   const handleErrorButton = () => {
     setShouldThrowError(true);
+  };
+
+  const handleClearStorage = () => {
+    if (
+      confirm(
+        "모든 localStorage 데이터를 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다."
+      )
+    ) {
+      clearAllLocalStorage();
+      toast.success("localStorage가 성공적으로 초기화되었습니다!");
+    }
   };
 
   if (shouldThrowError) {
@@ -76,15 +89,35 @@ export default function Home() {
         <p className="text-muted-foreground mb-4">
           에러 페이지 테스트를 위한 버튼입니다.
         </p>
+        <div className="flex gap-3">
+          <Button
+            onClick={handleErrorButton}
+            variant="destructive"
+            className={`
+              bg-red-600
+              hover:bg-red-700
+            `}
+          >
+            에러 발생시키기
+          </Button>
+        </div>
+      </div>
+
+      <div className="bg-card rounded-lg border p-6">
+        <h3 className="mb-4 text-xl font-semibold">데이터 관리</h3>
+        <p className="text-muted-foreground mb-4">
+          테스트용 사이트에서 로직이 변경될 때 사용자들의 localStorage를
+          초기화할 수 있습니다.
+        </p>
         <Button
-          onClick={handleErrorButton}
-          variant="destructive"
+          onClick={handleClearStorage}
+          variant="outline"
           className={`
-            bg-red-600
-            hover:bg-red-700
+            border-orange-500 text-orange-600
+            hover:border-orange-600 hover:bg-orange-50
           `}
         >
-          에러 발생시키기
+          localStorage 초기화
         </Button>
       </div>
     </div>

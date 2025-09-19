@@ -3,25 +3,48 @@
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { DataTable } from "@/components/ui/DataTable";
 import type { DataTableColumn } from "@/components/ui/DataTable";
-import { useQuery } from "@tanstack/react-query";
-import { adRequestsQueryOptions } from "@/lib/features/adRequests";
+// API 호출 관련 import 주석 처리
+// import { useQuery } from "@tanstack/react-query";
+// import { adRequestsQueryOptions } from "@/lib/features/adRequests";
 import { AdRequest } from "@/types/adRequests";
 import { AD_REQUEST_STATUS } from "@/constants/adRequest";
 import { formatDate } from "@/utils/date";
+import { loadAdRequests } from "@/utils/localStorage";
 
 const AdRequestsPage = () => {
   const [activeFilter, setActiveFilter] = useState<number>(0);
   const router = useRouter();
 
-  const { data, isLoading } = useQuery({
-    ...adRequestsQueryOptions(),
-  });
+  // API 호출 부분을 주석 처리하고 localStorage 사용
+  // const { data, isLoading } = useQuery({
+  //   ...adRequestsQueryOptions(),
+  // });
 
-  const adRequestsData = data?.sort((a, b) => b.id - a.id) || [];
+  // localStorage에서 데이터 가져오기
+  const [adRequestsData, setAdRequestsData] = useState<AdRequest[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 컴포넌트 마운트 시 localStorage에서 데이터 로드
+  useEffect(() => {
+    const loadData = () => {
+      try {
+        const data = loadAdRequests();
+        setAdRequestsData(
+          data.sort((a: any, b: any) => b.id - a.id) as AdRequest[]
+        );
+      } catch (error) {
+        console.error("Failed to load ad requests:", error);
+        setAdRequestsData([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadData();
+  }, []);
 
   const filteredRequests = adRequestsData.filter((request: AdRequest) => {
     if (activeFilter === 0) {

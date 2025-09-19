@@ -41,13 +41,13 @@ export const MOCK_STEP2_DATA = {
   },
   viewAssets: {
     thumbnailFeed:
-      "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400",
+      "https://cdn-ao-dev.adison.co/uploads/ad/thumbnail/13792/92faa4b45b.webp",
     thumbnailIcon:
-      "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=100",
+      "https://cdn-ao-dev.adison.co/uploads/images/2025/9/18/ae17a3d23f25aead28ee.webp",
     title: "특별한 혜택을 놓치지 마세요!",
     subtitle: "지금 바로 시작하는 특별한 광고 캠페인",
     detailImage:
-      "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800",
+      "https://cdn-ao-dev.adison.co/uploads/images/2025/9/18/14c479386e8322646f7e.webp",
     navigationTitle: "광고 상세 정보",
     detailTitle: "더 자세한 정보가 궁금하다면?",
     detailSubtitle: "이벤트 참여 방법과 혜택을 확인해보세요",
