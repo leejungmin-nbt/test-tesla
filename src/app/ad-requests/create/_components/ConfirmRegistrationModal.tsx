@@ -2,20 +2,31 @@
 
 import { Modal } from "@/components/common/Modal";
 import { AdRequestCreateFormType } from "@/schema/adRequestCreate.schema";
-import adTypesData from "@/data/adTypes.json";
-import adSettleTypesData from "@/data/adSettleTypes.json";
-import categoriesData from "@/data/categories.json";
-import advertisersData from "@/data/advertisers.json";
-import advertiserIntegrationsData from "@/data/advertiserIntegrations.json";
-import repeatParticipateTypesData from "@/data/repeatParticipateTypes.json";
-import helpRequestPersonalInfoTypesData from "@/data/helpRequestPersonalInfoTypes.json";
-import adisonMediaData from "@/data/adisonMedia.json";
+
+import { formatDate } from "@/utils/date";
+import {
+  getAdvertiserName,
+  getCategoryName,
+  getReportTypeName,
+  getRepeatParticipateTypeName,
+  getHelpRequestPersonalInfoTypeNames,
+  getAdTypeName,
+  getAdActionTypeName,
+  getOsNames,
+  getGenderNames,
+  getAdisonModeName,
+  getPublisherNames,
+  getAdvertiserIntegrationName,
+  getAdSettleTypeName,
+  getCookieovenPublisherNames,
+} from "@/utils/dataMapping";
 
 interface ConfirmRegistrationModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
   formData: AdRequestCreateFormType;
+  disabled: boolean;
 }
 
 const ConfirmRegistrationModal: React.FC<ConfirmRegistrationModalProps> = ({
@@ -23,127 +34,8 @@ const ConfirmRegistrationModal: React.FC<ConfirmRegistrationModalProps> = ({
   onClose,
   onConfirm,
   formData,
+  disabled,
 }) => {
-  // 데이터 매핑 함수들
-  const getAdTypeName = (id: string) => {
-    const adType = adTypesData.find((type) => type.id.toString() === id);
-    return adType?.name || id;
-  };
-
-  const getAdSettleTypeName = (id: string) => {
-    const settleType = adSettleTypesData.find(
-      (type) => type.id.toString() === id
-    );
-    return settleType?.name || id;
-  };
-
-  const getCategoryName = (id: string) => {
-    const category = categoriesData.find((cat) => cat.id.toString() === id);
-    return category?.name || id;
-  };
-
-  const getAdvertiserName = (id: string) => {
-    const advertiser = advertisersData.find((adv) => adv.id.toString() === id);
-    return advertiser?.name || id;
-  };
-
-  const getAdvertiserIntegrationName = (id: string) => {
-    const integration = advertiserIntegrationsData.find(
-      (int) => int.id.toString() === id
-    );
-    return integration?.name || id;
-  };
-
-  const getRepeatParticipateTypeName = (id: string) => {
-    const type = repeatParticipateTypesData.find((t) => t.id.toString() === id);
-    return type?.name || id;
-  };
-
-  const getHelpRequestPersonalInfoTypeNames = (ids: string[]) => {
-    return ids.map((id) => {
-      const type = helpRequestPersonalInfoTypesData.find(
-        (t) => t.id.toString() === id
-      );
-      return type?.name || id;
-    });
-  };
-
-  const getGenderNames = (genders: string[]) => {
-    const genderMap: { [key: string]: string } = {
-      Male: "남성",
-      Female: "여성",
-      Etc: "기타",
-    };
-    return genders.map((gender) => genderMap[gender] || gender);
-  };
-
-  const getOsNames = (os: string[]) => {
-    const osMap: { [key: string]: string } = {
-      Android: "Android",
-      iOS: "iOS",
-    };
-    return os.map((o) => osMap[o] || o);
-  };
-
-  const getCookieovenPublisherNames = (ids: string[]) => {
-    const publisherMap: { [key: string]: string } = {
-      "1": "웹툰",
-      "2": "시리즈",
-    };
-    return ids.map((id) => publisherMap[id] || id);
-  };
-
-  const getAdActionTypeName = (id: string) => {
-    const actionTypeMap: { [key: string]: string } = {
-      "1": "WEB",
-      "2": "APP",
-    };
-    return actionTypeMap[id] || id;
-  };
-
-  const getAdisonMediaNames = (ids: (string | number)[]) => {
-    return ids.map((id) => {
-      const numericId = typeof id === "string" ? parseInt(id, 10) : id;
-      const media = adisonMediaData.find((item) => item.id === numericId);
-      return media?.name || id.toString();
-    });
-  };
-
-  const getAdisonModeName = (mode: string[]) => {
-    const modeMap: { [key: string]: string } = {
-      ALL: "전체",
-      INCLUDE: "지정매체",
-      EXCLUDE: "제외매체",
-    };
-    return mode.map((m) => modeMap[m] || m);
-  };
-
-  const formatCurrency = (value: string | number) => {
-    const numValue = typeof value === "string" ? parseFloat(value) : value;
-    if (isNaN(numValue)) return value.toString();
-    return `${numValue.toLocaleString()}원`;
-  };
-
-  const formatCount = (value: string | number) => {
-    const numValue = typeof value === "string" ? parseFloat(value) : value;
-    if (isNaN(numValue)) return value.toString();
-    return `${numValue.toLocaleString()}개`;
-  };
-
-  const formatDateTime = (isoString: string) => {
-    try {
-      const date = new Date(isoString);
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const day = String(date.getDate()).padStart(2, "0");
-      const hours = String(date.getHours()).padStart(2, "0");
-      const minutes = String(date.getMinutes()).padStart(2, "0");
-      return `${year}-${month}-${day} ${hours}:${minutes}`;
-    } catch {
-      return isoString;
-    }
-  };
-
   return (
     <Modal
       isOpen={isOpen}
@@ -153,9 +45,10 @@ const ConfirmRegistrationModal: React.FC<ConfirmRegistrationModalProps> = ({
       description="입력하신 정보를 최종 확인해주세요."
       cancelText="취소"
       confirmText="등록"
+      disabled={disabled}
       size="3xl"
     >
-      <div className="modal-content-3xl space-y-6 overflow-y-auto">
+      <div className="modal-content-lg space-y-6 overflow-y-auto">
         {/* 캠페인 정보 */}
         <div className="space-y-3">
           <h3 className="border-b pb-2 text-lg font-semibold text-gray-900">
@@ -194,7 +87,9 @@ const ConfirmRegistrationModal: React.FC<ConfirmRegistrationModalProps> = ({
             </div>
             <div>
               <span className="font-medium text-gray-600">리포트 타입:</span>
-              <p className="text-gray-900">{formData.reportType}</p>
+              <p className="text-gray-900">
+                {getReportTypeName(formData.reportType)}
+              </p>
             </div>
             <div>
               <span className="font-medium text-gray-600">재참여 타입:</span>
@@ -261,13 +156,13 @@ const ConfirmRegistrationModal: React.FC<ConfirmRegistrationModalProps> = ({
                     modes.includes("지정매체") &&
                     publisherIds.length > 0
                   ) {
-                    const mediaNames = getAdisonMediaNames(publisherIds);
+                    const mediaNames = getPublisherNames(publisherIds);
                     return `지정매체: ${mediaNames.join(", ")}`;
                   } else if (
                     modes.includes("제외매체") &&
                     publisherIds.length > 0
                   ) {
-                    const mediaNames = getAdisonMediaNames(publisherIds);
+                    const mediaNames = getPublisherNames(publisherIds);
                     return `제외매체: ${mediaNames.join(", ")}`;
                   } else {
                     return modes.join(", ");
@@ -295,29 +190,38 @@ const ConfirmRegistrationModal: React.FC<ConfirmRegistrationModalProps> = ({
             </div>
             <div>
               <span className="font-medium text-gray-600">시작일:</span>
-              <p className="text-gray-900">
-                {formatDateTime(formData.startAt)}
-              </p>
+              <p className="text-gray-900">{formatDate(formData.startAt)}</p>
             </div>
 
             <div>
               <span className="font-medium text-gray-600">타겟 시간:</span>
-              <p className="text-gray-900">
-                {formData.targetTimes.from} ~ {formData.targetTimes.to}
-              </p>
+              <div className="text-gray-900">
+                {formData.targetTimes && formData.targetTimes.length > 0 ? (
+                  <div className="space-y-1">
+                    {formData.targetTimes.map((timeRange, index) => (
+                      <div key={index} className="text-sm">
+                        {timeRange.from && timeRange.to
+                          ? `${timeRange.from} ~ ${timeRange.to}`
+                          : "시간 미설정"}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <span className="text-gray-500">설정된 시간 없음</span>
+                )}
+              </div>
             </div>
             <div>
               <span className="font-medium text-gray-600">종료일:</span>
-              <p className="text-gray-900">{formatDateTime(formData.endAt)}</p>
+              <p className="text-gray-900">{formatDate(formData.endAt)}</p>
             </div>
             <div>
               <span className="font-medium text-gray-600">랜딩 URL:</span>
-              <p className="text-gray-900">
-                기본: {formData.landingUrl.default}
-                {formData.landingUrl.android &&
-                  `, Android: ${formData.landingUrl.android}`}
-                {formData.landingUrl.ios && `, iOS: ${formData.landingUrl.ios}`}
-              </p>
+              <div className="text-gray-900">
+                <p>기본: {formData.landingUrl.default}</p>
+                <p>Android: {formData.landingUrl.android}</p>
+                <p>iOS: {formData.landingUrl.ios}</p>
+              </div>
             </div>
             <div>
               <span className="font-medium text-gray-600">광고 정산 타입:</span>
@@ -327,29 +231,37 @@ const ConfirmRegistrationModal: React.FC<ConfirmRegistrationModalProps> = ({
             </div>
             <div>
               <span className="font-medium text-gray-600">비용:</span>
-              <p className="text-gray-900">{formatCurrency(formData.cost)}</p>
+              <p className="text-gray-900">
+                {Number(formData.cost).toLocaleString()}원
+              </p>
             </div>
             <div>
               <span className="font-medium text-gray-600">최소 지급 금액:</span>
               <p className="text-gray-900">
-                {formatCurrency(formData.minPaymentAmount)}
+                {formData.minPaymentAmount
+                  ? Number(formData.minPaymentAmount).toLocaleString() + "원"
+                  : "-"}
               </p>
             </div>
             <div>
               <span className="font-medium text-gray-600">예산:</span>
-              <p className="text-gray-900">{formatCurrency(formData.budget)}</p>
+              <p className="text-gray-900">
+                {Number(formData.budget).toLocaleString()}원
+              </p>
             </div>
             <div>
               <span className="font-medium text-gray-600">
                 일일 물량 자동 설정:
               </span>
               <p className="text-gray-900">
-                {formatCount(formData.dailyActionCap)}
+                {Number(formData.dailyActionCap).toLocaleString()}개
               </p>
             </div>
             <div>
               <span className="font-medium text-gray-600">후지급 시간:</span>
-              <p className="text-gray-900">{formData.delayTerm}시간</p>
+              <p className="text-gray-900">
+                {formData.delayTerm ? `${formData.delayTerm}시간` : "-"}
+              </p>
             </div>
             <div>
               <span className="font-medium text-gray-600">
@@ -360,15 +272,26 @@ const ConfirmRegistrationModal: React.FC<ConfirmRegistrationModalProps> = ({
             <div>
               <span className="font-medium text-gray-600">타겟 성별:</span>
               <p className="text-gray-900">
-                {getGenderNames(formData.targetGenders || []).join(", ")}
+                {formData.targetGenders && formData.targetGenders.length > 0
+                  ? getGenderNames(formData.targetGenders || []).join(", ")
+                  : "-"}
               </p>
             </div>
             <div>
               <span className="font-medium text-gray-600">타겟 나이:</span>
               <p className="text-gray-900">
-                {formData.targetAges?.from || ""}세 ~{" "}
-                {formData.targetAges?.to || ""}세
+                {formData.targetAges && formData.targetAges.length > 0
+                  ? formData.targetAges
+                      .map((age) => `${age.from}세 ~ ${age.to}세`)
+                      .join(", ")
+                  : "-"}
               </p>
+            </div>
+            <div>
+              <span className="font-medium text-gray-600">
+                타겟팅 요청 사항:
+              </span>
+              <p className="text-gray-900">{formData.targetOther}</p>
             </div>
           </div>
         </div>
@@ -420,13 +343,13 @@ const ConfirmRegistrationModal: React.FC<ConfirmRegistrationModalProps> = ({
             <div>
               <span className="font-medium text-gray-600">상세 부제목:</span>
               <p className="text-gray-900">
-                {formData.viewAssets.detailSubtitle}
+                {formData.viewAssets.detailSubtitle || "-"}
               </p>
             </div>
             <div>
               <span className="font-medium text-gray-600">CTA:</span>
               <p className="text-gray-900">
-                {formData.viewAssets.callToAction}
+                {formData.viewAssets.callToAction || "-"}
               </p>
             </div>
             <div>

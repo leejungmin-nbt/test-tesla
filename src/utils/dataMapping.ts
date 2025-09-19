@@ -1,96 +1,104 @@
-// JSON 데이터들을 import
-import advertisers from "@/data/advertisers.json";
-import categories from "@/data/categories.json";
-import adTypes from "@/data/adTypes.json";
-import adSettleTypes from "@/data/adSettleTypes.json";
-import repeatParticipateTypes from "@/data/repeatParticipateTypes.json";
-import helpRequestPersonalInfoTypes from "@/data/helpRequestPersonalInfoTypes.json";
+import advertisersData from "@/data/advertisers.json";
+import categoriesData from "@/data/categories.json";
+import adTypesData from "@/data/adTypes.json";
+import adSettleTypesData from "@/data/adSettleTypes.json";
+import repeatParticipateTypesData from "@/data/repeatParticipateTypes.json";
+import helpRequestPersonalInfoTypesData from "@/data/helpRequestPersonalInfoTypes.json";
+import advertiserIntegrationsData from "@/data/advertiserIntegrations.json";
+import publishersData from "@/data/publishers.json";
+import {
+  AD_ACTION_TYPE_OPTIONS,
+  AD_REQUEST_REPORT_TYPE,
+  TARGET_COOKIEOVEN_PUBLISHER_TYPE_OPTIONS,
+  TARGET_GENDERS_OPTIONS,
+  TARGET_OS_OPTIONS,
+} from "@/constants/adRequest";
 
-// ID를 name으로 매핑하는 유틸리티 함수들
-export const getAdvertiserName = (id: string): string => {
-  const advertiser = advertisers.find((item) => item.id === Number(id));
+export const getAdvertiserName = (id: string) => {
+  const advertiser = advertisersData.find((adv) => adv.id.toString() === id);
   return advertiser?.name || id;
 };
 
-export const getCategoryName = (id: string): string => {
-  const category = categories.find((item) => item.id === Number(id));
+export const getCategoryName = (id: string) => {
+  const category = categoriesData.find((cat) => cat.id.toString() === id);
   return category?.name || id;
 };
 
-export const getAdTypeName = (id: string): string => {
-  const adType = adTypes.find((item) => item.id === Number(id));
+export const getAdTypeName = (id: string) => {
+  const adType = adTypesData.find((type) => type.id.toString() === id);
   return adType?.name || id;
 };
 
-export const getAdSettleTypeName = (id: string): string => {
-  const adSettleType = adSettleTypes.find((item) => item.id === Number(id));
-  return adSettleType?.name || id;
-};
-
-export const getRepeatParticipateTypeName = (id: string): string => {
-  const repeatParticipateType = repeatParticipateTypes.find(
-    (item) => item.id === Number(id)
+export const getAdSettleTypeName = (id: string) => {
+  const settleType = adSettleTypesData.find(
+    (type) => type.id.toString() === id
   );
-  return repeatParticipateType?.name || id;
+  return settleType?.name || id;
 };
 
-export const getHelpRequestPersonalInfoTypeNames = (
-  ids: string[]
-): string[] => {
+export const getRepeatParticipateTypeName = (id: string) => {
+  const type = repeatParticipateTypesData.find((t) => t.id.toString() === id);
+  return type?.name || id;
+};
+
+export const getHelpRequestPersonalInfoTypeNames = (ids: string[]) => {
   return ids.map((id) => {
-    const helpRequestPersonalInfoType = helpRequestPersonalInfoTypes.find(
-      (item) => item.id === Number(id)
+    const type = helpRequestPersonalInfoTypesData.find(
+      (t) => t.id.toString() === id
     );
-    return helpRequestPersonalInfoType?.name || id;
+    return type?.name || id;
   });
 };
 
-// 리포트 타입 매핑 (임시 - 실제 데이터가 없으므로)
-export const getReportTypeName = (id: string): string => {
-  const reportTypeMap: { [key: string]: string } = {
-    "1": "일일 리포트",
-    "2": "주간 리포트",
-    "3": "월간 리포트",
-  };
-  return reportTypeMap[id] || id;
+export const getReportTypeName = (id: string) => {
+  return AD_REQUEST_REPORT_TYPE.find((type) => type.id === Number(id))?.name;
 };
 
-// 광고 액션 타입 매핑 (임시 - 실제 데이터가 없으므로)
-export const getAdActionTypeName = (id: string): string => {
-  const adActionTypeMap: { [key: string]: string } = {
-    "1": "설치",
-    "2": "실행",
-    "3": "구매",
-    "4": "회원가입",
-  };
-  return adActionTypeMap[id] || id;
+export const getAdActionTypeName = (id: string) => {
+  return AD_ACTION_TYPE_OPTIONS.find((a) => a.value === id)?.label || id;
 };
 
-// 타겟 OS 매핑 (임시 - 실제 데이터가 없으므로)
-export const getTargetOsNames = (ids: string[]): string[] => {
-  const osMap: { [key: string]: string } = {
-    "1": "Android",
-    "2": "iOS",
-    "3": "Web",
-  };
-  return ids.map((id) => osMap[id] || id);
+export const getOsNames = (os: string[]) => {
+  return os.map(
+    (o) => TARGET_OS_OPTIONS.find((os) => os.value === o)?.label || o
+  );
 };
 
-// 타겟 성별 매핑 (임시 - 실제 데이터가 없으므로)
-export const getTargetGenderNames = (ids: string[]): string[] => {
-  const genderMap: { [key: string]: string } = {
-    "1": "남성",
-    "2": "여성",
-  };
-  return ids.map((id) => genderMap[id] || id);
+export const getGenderNames = (genders: string[]) => {
+  return genders.map(
+    (gender) =>
+      TARGET_GENDERS_OPTIONS.find((g) => g.value === gender)?.label || gender
+  );
 };
 
-// 애디슨 매체 집행 방식 매핑
-export const getAdisonPublisherModeNames = (modes: string[]): string[] => {
+export const getAdisonModeName = (mode: string[]) => {
   const modeMap: { [key: string]: string } = {
     ALL: "전체",
-    INCLUDE: "지정",
-    EXCLUDE: "제외",
+    INCLUDE: "지정매체",
+    EXCLUDE: "제외매체",
   };
-  return modes.map((mode) => modeMap[mode] || mode);
+  return mode.map((m) => modeMap[m] || m);
+};
+
+export const getPublisherNames = (ids: (string | number)[]) => {
+  return ids.map((id) => {
+    const numericId = typeof id === "string" ? parseInt(id, 10) : id;
+    const publisher = publishersData.find((item) => item.id === numericId);
+    return publisher?.name || id.toString();
+  });
+};
+
+export const getAdvertiserIntegrationName = (id: string) => {
+  const integration = advertiserIntegrationsData.find(
+    (int) => int.id.toString() === id
+  );
+  return integration?.name || id;
+};
+
+export const getCookieovenPublisherNames = (ids: string[]) => {
+  return ids.map(
+    (id) =>
+      TARGET_COOKIEOVEN_PUBLISHER_TYPE_OPTIONS.find((p) => p.value === id)
+        ?.label || id
+  );
 };

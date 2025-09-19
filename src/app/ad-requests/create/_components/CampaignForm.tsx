@@ -14,7 +14,8 @@ import advertisersData from "@/data/advertisers.json";
 import advertiserIntegrationsData from "@/data/advertiserIntegrations.json";
 import helpRequestPersonalInfoTypesData from "@/data/helpRequestPersonalInfoTypes.json";
 import repeatParticipateTypesData from "@/data/repeatParticipateTypes.json";
-import { generateTestData } from "@/utils/testDataGenerator";
+import { AD_REQUEST_REPORT_TYPE } from "@/constants/adRequest";
+import { MOCK_STEP1_DATA } from "@/data/mockDatas";
 
 // repeatParticipateTypes.json 데이터를 기반으로 REPEAT_PARTICIPATE_TYPE_OPTIONS 생성
 const REPEAT_PARTICIPATE_TYPE_OPTIONS = repeatParticipateTypesData.map(
@@ -58,25 +59,8 @@ interface CampaignFormProps {
 
 const CampaignForm: React.FC<CampaignFormProps> = ({ control, setValue }) => {
   const addMockStep1Data = () => {
-    const testData = generateTestData();
-
-    // Step 1 관련 필드만 설정
-    const step1Fields: (keyof AdRequestCreateFormType)[] = [
-      "title",
-      "advertiserId",
-      "brand",
-      "adVendor",
-      "categoryId",
-      "advertiserIntegrationId",
-      "reportType",
-      "repeatParticipateTypeId",
-      "helpRequestPersonalInfoTypeIds",
-      "advertiserCsManagerNames",
-      "advertiserCsManagerEmails",
-    ];
-
-    step1Fields.forEach((field) => {
-      setValue(field, testData[field], {
+    Object.entries(MOCK_STEP1_DATA).forEach(([key, value]) => {
+      setValue(key as keyof AdRequestCreateFormType, value as never, {
         shouldDirty: true,
         shouldValidate: true,
       });
@@ -158,15 +142,10 @@ const CampaignForm: React.FC<CampaignFormProps> = ({ control, setValue }) => {
         control={control}
         label="리포트 타입"
         placeholder="리포트 타입을 선택하세요."
-        options={[
-          { value: "NORMAL", label: "NORMAL" },
-          { value: "CPP", label: "CPP" },
-          { value: "CPS", label: "CPS" },
-          { value: "CPQ", label: "CPQ" },
-          { value: "CPC", label: "CPC" },
-          { value: "CPM", label: "CPM" },
-          { value: "CPS_REWARD_FAIL", label: "CPS_REWARD_FAIL" },
-        ]}
+        options={AD_REQUEST_REPORT_TYPE.map((reportType) => ({
+          value: reportType.id.toString(),
+          label: reportType.name,
+        }))}
         required
       />
       <SelectForm

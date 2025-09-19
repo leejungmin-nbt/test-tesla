@@ -25,7 +25,7 @@ const TimeRangeForm = <T extends FieldValues = FieldValues>({
 }: TimeRangeFormProps<T>) => {
   return (
     <div className={className}>
-      <div className="flex items-center gap-4">
+      <div className="flex items-start gap-4">
         <div className="flex-1">
           <TimePicker
             name={fromName}

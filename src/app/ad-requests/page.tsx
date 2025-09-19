@@ -3,35 +3,38 @@
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { DataTable } from "@/components/ui/DataTable";
 import type { DataTableColumn } from "@/components/ui/DataTable";
-import { getAdRequests, type StoredAdRequest } from "@/utils/localStorage";
-
-type StatusType = "전체" | "검수중" | "검수완료";
+import { useQuery } from "@tanstack/react-query";
+import { adRequestsQueryOptions } from "@/lib/features/adRequests";
+import { AdRequest } from "@/types/adRequests";
+import { AD_REQUEST_STATUS } from "@/constants/adRequest";
+import { formatDate } from "@/utils/date";
 
 const AdRequestsPage = () => {
-  const [activeFilter, setActiveFilter] = useState<StatusType>("전체");
-  const [adRequests, setAdRequests] = useState<StoredAdRequest[]>([]);
+  const [activeFilter, setActiveFilter] = useState<number>(0);
   const router = useRouter();
 
-  // 로컬스토리지에서 데이터 로드
-  useEffect(() => {
-    const requests = getAdRequests();
-    setAdRequests(requests);
-  }, []);
+  const { data, isLoading } = useQuery({
+    ...adRequestsQueryOptions(),
+  });
 
-  // 필터링된 데이터 (ID가 높은 순으로 정렬 - 최신 순)
-  const filteredRequests = adRequests
-    .filter((request) => {
-      if (activeFilter === "전체") return true;
-      return request.status === activeFilter;
-    })
-    .sort((a, b) => b.id - a.id); // ID가 높은 순으로 정렬 (최신 순)
+  const adRequestsData = data?.sort((a, b) => b.id - a.id) || [];
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
+  const filteredRequests = adRequestsData.filter((request: AdRequest) => {
+    if (activeFilter === 0) {
+      return true;
+    }
+
+    return request.status === activeFilter;
+  });
+
+  const getStatusColor = (status: number) => {
+    const statusData = AD_REQUEST_STATUS.find((item) => item.id === status);
+
+    switch (statusData?.name) {
       case "검수중":
         return "bg-orange-100 text-orange-800";
       case "검수완료":
@@ -41,38 +44,21 @@ const AdRequestsPage = () => {
     }
   };
 
-  // 필터 버튼 데이터
-  const filterOptions: StatusType[] = ["전체", "검수중", "검수완료"];
-
-  // 각 상태별 개수 계산
-  const getStatusCount = (status: StatusType) => {
-    if (status === "전체") {
-      return adRequests.length;
+  const getStatusCount = (status: number) => {
+    if (status === 0) {
+      return adRequestsData.length;
     }
 
-    return adRequests.filter((request) => request.status === status).length;
+    return adRequestsData.filter(
+      (request: AdRequest) => request.status === status
+    ).length;
   };
 
-  const columns: DataTableColumn<StoredAdRequest>[] = [
+  const columns: DataTableColumn<AdRequest>[] = [
     {
-      key: "title",
+      key: "name",
       title: "제목",
       render: (value) => <div className="font-medium">{String(value)}</div>,
-    },
-    {
-      key: "company",
-      title: "회사",
-      render: (value) => (
-        <span className="text-muted-foreground">{String(value)}</span>
-      ),
-    },
-    {
-      key: "budget",
-      title: "예산",
-      align: "right",
-      render: (value) => (
-        <span className="text-muted-foreground">{String(value)}</span>
-      ),
     },
     {
       key: "status",
@@ -82,10 +68,10 @@ const AdRequestsPage = () => {
         <span
           className={`
             rounded-full px-2 py-1 text-xs font-medium
-            ${getStatusColor(String(value))}
+            ${getStatusColor(Number(value))}
           `}
         >
-          {String(value)}
+          {AD_REQUEST_STATUS.find((item) => item.id === Number(value))?.name}
         </span>
       ),
     },
@@ -93,13 +79,14 @@ const AdRequestsPage = () => {
       key: "createdAt",
       title: "등록일",
       render: (value) => (
-        <span className="text-muted-foreground">{String(value)}</span>
+        <span className="text-muted-foreground">
+          {formatDate(value as string)}
+        </span>
       ),
     },
   ];
 
-  // 로우 클릭 핸들러
-  const handleRowClick = (record: StoredAdRequest) => {
+  const handleRowClick = (record: AdRequest) => {
     router.push(`/ad-requests/${record.id}`);
   };
 
@@ -108,7 +95,7 @@ const AdRequestsPage = () => {
       {/* 헤더 */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold">광고 요청 목록</h2>
+          <h2 className="text-2xl font-semibold">광고 요청 목록 (예시 화면)</h2>
           <p className="text-muted-foreground">
             등록된 광고 요청을 관리하고 추적하세요.
           </p>
@@ -125,30 +112,29 @@ const AdRequestsPage = () => {
         <span className="text-muted-foreground mr-2 text-sm font-medium">
           상태별 필터:
         </span>
-        {filterOptions.map((option) => (
+        {AD_REQUEST_STATUS.map((option) => (
           <Button
-            key={option}
-            variant={activeFilter === option ? "default" : "outline"}
+            key={option.id}
+            variant={activeFilter === option.id ? "default" : "outline"}
             size="sm"
-            onClick={() => setActiveFilter(option)}
+            onClick={() => setActiveFilter(option.id)}
             className="transition-all"
           >
-            {option}
+            {option.name}
             <span className="bg-background/20 ml-2 rounded-full px-1.5 py-0.5 text-xs">
-              {getStatusCount(option)}
+              {getStatusCount(option.id)}
             </span>
           </Button>
         ))}
       </div>
-
       {/* 테이블 */}
       <DataTable
         data={filteredRequests}
         columns={columns}
         onRowClick={handleRowClick}
         emptyMessage={`${activeFilter} 상태의 광고 요청이 없습니다.`}
-        totalCount={adRequests.length}
-        // loading={true}
+        totalCount={adRequestsData.length}
+        loading={isLoading}
       />
     </div>
   );

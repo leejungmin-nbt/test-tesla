@@ -13,7 +13,7 @@ export const adRequestStep1CampaignInfoSchema = z.object({
   helpRequestPersonalInfoTypeIds: z
     .array(z.string())
     .min(1, "개인정보 수집 항목을 선택해주세요."), // number
-  advertiserCsManagerNames: z.string().optional().nullable(),
+  advertiserCsManagerNames: z.string(),
   advertiserCsManagerEmails: z.string().min(1, "이메일을 입력해주세요."),
 });
 
@@ -30,10 +30,12 @@ export const adRequestStep2AdInfoSchema = z.object({
   adTypeId: z.string().min(1, "광고 타입을 선택해주세요."), // number
   startAt: z.string().min(1, "광고 시작 시간을 선택해주세요."),
   endAt: z.string().min(1, "광고 종료 시간을 선택해주세요."),
-  targetTimes: z.object({
-    from: z.string(),
-    to: z.string(),
-  }),
+  targetTimes: z.array(
+    z.object({
+      from: z.string().min(1, "시작 시간을 선택해주세요."),
+      to: z.string().min(1, "종료 시간을 선택해주세요."),
+    })
+  ),
 
   landingUrl: z.object({
     default: z
@@ -82,14 +84,13 @@ export const adRequestStep2AdInfoSchema = z.object({
     .min(1, "광고 참여 후 완료 인정 유호기간(일단위)을 입력해주세요."), // number
 
   targetGenders: z.array(z.string()).optional().nullable(),
-  targetAges: z
-    .object({
-      from: z.string(),
-      to: z.string(),
+  targetAges: z.array(
+    z.object({
+      from: z.string().min(1, "시작 나이를 입력해주세요."),
+      to: z.string().min(1, "종료 나이를 입력해주세요."),
     })
-    .optional()
-    .nullable(),
-
+  ),
+  targetOther: z.string(),
   targetAdisonPublisherIds: z
     .object({
       mode: z

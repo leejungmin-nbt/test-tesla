@@ -19,12 +19,12 @@ import {
   saveFormData,
   loadFormData,
   clearFormData,
-  saveAdRequest,
-  type StoredAdRequest,
 } from "@/utils/localStorage";
 import ConfirmRegistrationModal from "./_components/ConfirmRegistrationModal";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { createAdRequestMutationOptions } from "@/lib/features/adRequests/queries";
 
 const CreateAdRequestPage = () => {
   const [step, setStep] = useState(1);
@@ -33,6 +33,12 @@ const CreateAdRequestPage = () => {
   const [savedFormData, setSavedFormData] =
     useState<AdRequestCreateFormType | null>(null);
   const router = useRouter();
+
+  const { mutate: createAdRequest, isPending: isCreatingAdRequestPending } =
+    useMutation({
+      ...createAdRequestMutationOptions,
+    });
+
   const {
     control,
     handleSubmit,
@@ -63,7 +69,7 @@ const CreateAdRequestPage = () => {
       adTypeId: "",
       startAt: "",
       endAt: "",
-      targetTimes: { from: "", to: "" },
+      targetTimes: [],
       landingUrl: { default: "", android: "", ios: "" },
       viewAssets: {
         thumbnailFeed: "",
@@ -85,7 +91,8 @@ const CreateAdRequestPage = () => {
       delayTerm: "",
       participateExpiredAt: "1",
       targetGenders: [],
-      targetAges: { from: "", to: "" },
+      targetAges: [],
+      targetOther: "",
       targetAdisonPublisherIds: { mode: [], publisherIds: [] },
     },
   });
@@ -151,6 +158,7 @@ const CreateAdRequestPage = () => {
         "participateExpiredAt",
         "targetGenders",
         "targetAges",
+        "targetOther",
         "targetAdisonPublisherIds",
       ];
       return await trigger(step2Fields);
@@ -170,6 +178,70 @@ const CreateAdRequestPage = () => {
     if (step > 1) {
       setStep(step - 1);
     }
+  };
+
+  // 등록 버튼 클릭 시 확인 모달 표시
+  const handleRegisterClick = async () => {
+    const isCurrentStepValid = await validateCurrentStep(step);
+    if (isCurrentStepValid) {
+      setShowConfirmModal(true);
+    }
+  };
+
+  // 실제 등록 처리
+  const onSubmit = (data: AdRequestCreateFormType) => {
+    console.log("제출 폼 데이터 >> ", data);
+
+    const newData = {
+      ...data,
+      //step1
+      advertiserId: Number(data.advertiserId),
+      categoryId: Number(data.categoryId),
+      advertiserIntegrationId: Number(data.advertiserIntegrationId),
+      reportType: Number(data.reportType),
+      repeatParticipateTypeId: Number(data.repeatParticipateTypeId),
+      helpRequestPersonalInfoTypeIds:
+        data.helpRequestPersonalInfoTypeIds.map(Number),
+      // step2
+      targetCookieovenPublisherIds:
+        data.targetCookieovenPublisherIds.map(Number),
+      adActionTypeId: Number(data.adActionTypeId),
+      targetOs: data.targetOs.map(Number),
+      adTypeId: Number(data.adTypeId),
+      adSettleTypeId: Number(data.adSettleTypeId),
+      cost: Number(data.cost),
+      minPaymentAmount: Number(data.minPaymentAmount),
+      budget: Number(data.budget),
+      dailyActionCap: Number(data.dailyActionCap),
+      delayTerm: Number(data.delayTerm),
+      participateExpiredAt: Number(data.participateExpiredAt),
+      targetGenders: data.targetGenders || [],
+      targetAdisonPublisherIds: {
+        mode: data.targetAdisonPublisherIds.mode,
+        publisherIds: data.targetAdisonPublisherIds.publisherIds.map(Number),
+      },
+    };
+    console.log("newData >> ", newData);
+
+    createAdRequest(newData, {
+      onSuccess: () => {
+        toast.success("광고 요청이 성공적으로 등록되었습니다!");
+        router.push("/ad-requests");
+      },
+      onError: () => {
+        toast.error("광고 요청 등록에 실패했습니다.");
+      },
+    });
+  };
+
+  // 모달에서 등록 확인 시 호출되는 함수
+  const handleConfirmRegistration = () => {
+    handleSubmit(onSubmit)();
+  };
+
+  // 확인 모달 취소
+  const handleCancelRegistration = () => {
+    setShowConfirmModal(false);
   };
 
   useEffect(() => {
@@ -207,54 +279,6 @@ const CreateAdRequestPage = () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [isDirty, watchedData]);
-
-  // 등록 버튼 클릭 시 확인 모달 표시
-  const handleRegisterClick = async () => {
-    const isCurrentStepValid = await validateCurrentStep(step);
-    if (isCurrentStepValid) {
-      setShowConfirmModal(true);
-    }
-  };
-
-  // 실제 등록 처리
-  const onSubmit = (data: AdRequestCreateFormType) => {
-    console.log("제출 폼 데이터 >> ", data);
-
-    // 고유 ID 생성 (현재 시간 기반)
-    const id = Date.now();
-
-    // 등록된 광고 요청 데이터 생성
-    const adRequest: StoredAdRequest = {
-      id,
-      title: data.title,
-      company: data.adVendor,
-      status: "검수중",
-      createdAt: new Date().toISOString().split("T")[0],
-      budget: `${Number(data.budget).toLocaleString()}원`,
-      formData: data,
-    };
-
-    // 로컬스토리지에 저장
-    saveAdRequest(adRequest);
-
-    // 임시 폼 데이터 삭제
-    clearFormData();
-    setShowConfirmModal(false);
-
-    toast.success("광고 요청이 성공적으로 등록되었습니다!");
-
-    router.push("/ad-requests");
-  };
-
-  // 모달에서 등록 확인 시 호출되는 함수
-  const handleConfirmRegistration = () => {
-    handleSubmit(onSubmit)();
-  };
-
-  // 확인 모달 취소
-  const handleCancelRegistration = () => {
-    setShowConfirmModal(false);
-  };
 
   return (
     <div className="min-h-screen">
@@ -297,6 +321,7 @@ const CreateAdRequestPage = () => {
                   type="button"
                   onClick={handleRegisterClick}
                   className="cursor-pointer"
+                  disabled={isCreatingAdRequestPending}
                 >
                   등록
                 </Button>
@@ -327,6 +352,7 @@ const CreateAdRequestPage = () => {
         onClose={handleCancelRegistration}
         onConfirm={handleConfirmRegistration}
         formData={watchedData}
+        disabled={isCreatingAdRequestPending}
       />
     </div>
   );

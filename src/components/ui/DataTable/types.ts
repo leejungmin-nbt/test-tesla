@@ -1,15 +1,15 @@
 import type { ReactNode, ComponentType } from "react";
 
-export interface DataTableColumn<T = Record<string, unknown>> {
-  key: string;
+export interface DataTableColumn<T = any> {
+  key: keyof T;
   title: string;
   width?: string;
   align?: "left" | "center" | "right";
   sortable?: boolean;
-  render?: (value: unknown, record: T, index: number) => ReactNode;
+  render?: (value: T[keyof T], record: T, index: number) => ReactNode;
 }
 
-export interface DataTableAction<T = Record<string, unknown>> {
+export interface DataTableAction<T = any> {
   key: string;
   label: string;
   icon?: ComponentType<{ className?: string }>;
@@ -21,7 +21,7 @@ export interface DataTableAction<T = Record<string, unknown>> {
   hidden?: (record: T) => boolean;
 }
 
-export interface DataTableProps<T = Record<string, unknown>> {
+export interface DataTableProps<T = any> {
   data: T[];
   columns: DataTableColumn<T>[];
   actions?: DataTableAction<T>[];
