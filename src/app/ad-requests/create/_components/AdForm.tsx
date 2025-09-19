@@ -11,46 +11,24 @@ import {
   CardSelectForm,
 } from "@/components/form";
 import { Button } from "@/components/ui/button";
+import { AccordionSection, AccordionSectionItem } from "@/components/common";
 import { AdRequestCreateFormType } from "@/schema/adRequestCreate.schema";
 import adTypesData from "@/data/adTypes.json";
 import adSettleTypesData from "@/data/adSettleTypes.json";
-import TimeRangeForm from "./TimeRangeForm";
-import AgeRangeForm from "./AgeRangeForm";
+import TimeRangeListForm from "./TimeRangeListForm";
+import AgeRangeListForm from "./AgeRangeListForm";
 import AdisonPublisherTargetingForm from "./AdisonPublisherTargetingForm";
-import { generateTestData } from "@/utils/testDataGenerator";
+import {
+  TARGET_GENDERS_OPTIONS,
+  TARGET_OS_OPTIONS,
+  TARGET_COOKIEOVEN_PUBLISHER_TYPE_OPTIONS,
+  AD_ACTION_TYPE_OPTIONS,
+} from "@/constants/adRequest";
+import { MOCK_STEP2_DATA } from "@/data/mockDatas";
 
-interface AdFormProps {
-  control: Control<AdRequestCreateFormType>;
-  setValue: UseFormSetValue<AdRequestCreateFormType>;
-}
-
-const TARGET_PUBLISHER_TYPE_OPTIONS = [
-  {
-    value: "1",
-    label: "WEBTOON",
-  },
-  {
-    value: "2",
-    label: "SERIES",
-  },
-];
-
-const AD_ACTION_TYPE_OPTIONS = [
-  {
-    value: "1",
-    label: "WEB",
-  },
-  {
-    value: "2",
-    label: "APP",
-  },
-];
-
-const TARGET_OS_OPTIONS = [
-  {
-    value: "Android",
-    label: "Android",
-    icon: (
+const getOsIcon = (os: (typeof TARGET_OS_OPTIONS)[number]) => {
+  if (os.value === "1") {
+    return (
       <svg
         className="h-6 w-6 text-green-500"
         viewBox="0 0 24 24"
@@ -58,76 +36,70 @@ const TARGET_OS_OPTIONS = [
       >
         <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993.0001.5511-.4482.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.2439 13.8533 7.6808 12 7.6808s-3.5902.5631-5.1367 1.7279L4.841 5.9047a.416.416 0 00-.5676-.1521.416.416 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3432-4.1021-2.6889-7.5743-6.1185-9.4396" />
       </svg>
-    ),
-  },
-  {
-    value: "iOS",
-    label: "iOS",
-    icon: (
-      <svg
-        className="h-6 w-6 text-black"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-      >
-        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
-      </svg>
-    ),
-  },
-];
+    );
+  }
 
-const AD_TYPE_OPTIONS = adTypesData.map((adType) => ({
-  value: adType.id.toString(),
-  label: adType.name,
-}));
+  return (
+    <svg className="h-6 w-6 text-black" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+    </svg>
+  );
+};
 
-const AD_SETTLE_TYPE_OPTIONS = adSettleTypesData.map((adSettleType) => ({
-  value: adSettleType.id.toString(),
-  label: adSettleType.name,
-}));
-
-const TARGET_GENDERS_OPTIONS = [
-  {
-    value: "Male",
-    label: "남성",
-    icon: (
+const getGenderIcon = (gender: (typeof TARGET_GENDERS_OPTIONS)[number]) => {
+  if (gender.value === "man") {
+    return (
       <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
         <circle cx="12" cy="7" r="3" />
         <path d="M12 11c-3.5 0-6 2.5-6 5v1c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-1c0-2.5-2.5-5-6-5z" />
       </svg>
-    ),
-  },
-  {
-    value: "Female",
-    label: "여성",
-    icon: (
+    );
+  }
+
+  if (gender.value === "woman") {
+    return (
       <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
         <circle cx="9" cy="7" r="3" />
         <path d="M9 11c-3.5 0-6 2.5-6 5v1c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-1c0-2.5-2.5-5-6-5z" />
         <circle cx="15" cy="6" r="2.5" />
         <path d="M15 9.5c-2.8 0-4.5 2-4.5 4v.5c0 .8.7 1.5 1.5 1.5h6c.8 0 1.5-.7 1.5-1.5v-.5c0-2-1.7-4-4.5-4z" />
       </svg>
-    ),
-  },
-  {
-    value: "Etc",
-    label: "기타",
-    icon: (
-      <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-        <circle cx="10" cy="7" r="3" />
-        <path d="M10 11c-3.5 0-6 2.5-6 5v1c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-1c0-2.5-2.5-5-6-5z" />
-        <circle cx="19" cy="5" r="4" fill="currentColor" />
-        <path
-          d="M17 5l1.5 1.5L21 4"
-          stroke="white"
-          strokeWidth="1.5"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
-  },
-];
+    );
+  }
+
+  return null;
+};
+
+interface AdFormProps {
+  control: Control<AdRequestCreateFormType>;
+  setValue: UseFormSetValue<AdRequestCreateFormType>;
+}
+
+const TARGET_OS_OPTIONS_WITH_ICON = TARGET_OS_OPTIONS.map((os) => ({
+  value: os.value,
+  label: os.label,
+  icon: getOsIcon(os),
+}));
+
+const TARGET_GENDERS_OPTIONS_WITH_ICON = TARGET_GENDERS_OPTIONS.map(
+  (gender) => ({
+    value: gender.value,
+    label: gender.label,
+    icon: getGenderIcon(gender),
+  })
+);
+
+// adTypes.json 데이터를 기반으로 AD_TYPE_OPTIONS 생성
+const AD_TYPE_OPTIONS = adTypesData.map((adType) => ({
+  value: adType.id.toString(),
+  label: adType.name,
+}));
+
+// adSettleTypes.json 데이터를 기반으로 AD_SETTLE_TYPE_OPTIONS 생성
+const AD_SETTLE_TYPE_OPTIONS = adSettleTypesData.map((adSettleType) => ({
+  value: adSettleType.id.toString(),
+  label: adSettleType.name,
+}));
 
 const AdForm: React.FC<AdFormProps> = ({ control, setValue }) => {
   const targetCookieovenPublisherIds = useWatch({
@@ -135,39 +107,66 @@ const AdForm: React.FC<AdFormProps> = ({ control, setValue }) => {
     name: "targetCookieovenPublisherIds",
   });
 
+  // 타겟팅 아코디언 데이터 구성
+  const targetingAccordionItems: AccordionSectionItem[] = [
+    {
+      value: "demo",
+      title: "데모 타겟팅",
+      color: "basic",
+      children: (
+        <>
+          <CardSelectForm
+            name="targetGenders"
+            control={control}
+            label="대상 성별"
+            options={TARGET_GENDERS_OPTIONS_WITH_ICON}
+            layout="horizontal"
+          />
+          <AgeRangeListForm
+            name="targetAges"
+            control={control}
+            label="대상 나이 범위"
+            description="광고를 노출할 대상의 나이 범위를 설정해주세요"
+          />
+        </>
+      ),
+    },
+    {
+      value: "time",
+      title: "시간 타겟팅",
+      color: "green",
+      children: (
+        <TimeRangeListForm
+          name="targetTimes"
+          control={control}
+          label="노출 시간 설정"
+          description="광고가 노출될 시간 범위를 설정해주세요 (24시간제)"
+        />
+      ),
+    },
+    {
+      value: "other",
+      title: "기타 타겟팅",
+      color: "purple",
+      children: (
+        <TextAreaForm
+          name="targetOther"
+          control={control}
+          label="타겟팅 요청 사항"
+          placeholder="타겟팅 요청 사항"
+        />
+      ),
+    },
+  ];
+
   const campaignTitle = useWatch({
     control,
     name: "title",
   });
 
   const addMockStep2Data = () => {
-    const testData = generateTestData();
-
-    // Step 2 관련 필드만 설정
-    const step2Fields: (keyof AdRequestCreateFormType)[] = [
-      "targetCookieovenPublisherIds",
-      "adActionTypeId",
-      "targetOs",
-      "adTypeId",
-      "startAt",
-      "endAt",
-      "targetTimes",
-      "landingUrl",
-      "viewAssets",
-      "adSettleTypeId",
-      "cost",
-      "minPaymentAmount",
-      "budget",
-      "dailyActionCap",
-      "delayTerm",
-      "participateExpiredAt",
-      "targetGenders",
-      "targetAges",
-      "targetAdisonPublisherIds",
-    ];
-
-    step2Fields.forEach((field) => {
-      setValue(field, testData[field], {
+    Object.entries(MOCK_STEP2_DATA).forEach(([key, value]) => {
+      setValue(key as keyof AdRequestCreateFormType, value as never, {
         shouldDirty: true,
         shouldValidate: true,
       });
@@ -186,7 +185,7 @@ const AdForm: React.FC<AdFormProps> = ({ control, setValue }) => {
           name="targetCookieovenPublisherIds"
           control={control}
           label="집행 매체 (쿠키오븐)"
-          options={TARGET_PUBLISHER_TYPE_OPTIONS}
+          options={TARGET_COOKIEOVEN_PUBLISHER_TYPE_OPTIONS}
           layout="horizontal"
           required
         />
@@ -230,7 +229,7 @@ const AdForm: React.FC<AdFormProps> = ({ control, setValue }) => {
           name="targetOs"
           control={control}
           label="집행 매체 OS"
-          options={TARGET_OS_OPTIONS}
+          options={TARGET_OS_OPTIONS_WITH_ICON}
           layout="horizontal"
           required
         />
@@ -272,12 +271,6 @@ const AdForm: React.FC<AdFormProps> = ({ control, setValue }) => {
             required
           />
         </div>
-        <TimeRangeForm
-          fromName="targetTimes.from"
-          toName="targetTimes.to"
-          control={control}
-          description="광고가 노출될 시간 범위를 설정해주세요 (24시간제)"
-        />
       </FormSection>
       <FormSection
         title="광고 랜딩 URL"
@@ -434,22 +427,12 @@ const AdForm: React.FC<AdFormProps> = ({ control, setValue }) => {
         </div>
       </FormSection>
       <FormSection
-        title="광고 타켓팅 관리"
-        description="광고 타켓팅에 대한 정보를 입력해주세요."
+        title="광고 타겟팅 관리"
+        description="광고 타겟팅에 대한 정보를 등록해주세요."
       >
-        <CardSelectForm
-          name="targetGenders"
-          control={control}
-          label="대상 성별"
-          options={TARGET_GENDERS_OPTIONS}
-          layout="horizontal"
-        />
-        <AgeRangeForm
-          fromName="targetAges.from"
-          toName="targetAges.to"
-          control={control}
-          label="대상 나이 범위"
-          description="광고를 노출할 대상의 나이 범위를 설정해주세요"
+        <AccordionSection
+          items={targetingAccordionItems}
+          defaultValue={["demo", "time", "other"]}
         />
       </FormSection>
 

@@ -6,7 +6,7 @@ import { cn } from "@/utils/cn";
 import type { DataTableProps, DataTableAction } from "./types";
 import Link from "next/link";
 
-function DataTable<T extends Record<string, unknown>>({
+function DataTable<T = any>({
   data,
   columns,
   actions = [],
@@ -85,7 +85,7 @@ function DataTable<T extends Record<string, unknown>>({
               <tr className="border-b">
                 {columns.map((column) => (
                   <th
-                    key={column.key}
+                    key={String(column.key)}
                     className={cn("p-4 font-medium", {
                       "text-left": column.align === "left" || !column.align,
                       "text-center": column.align === "center",
@@ -105,7 +105,7 @@ function DataTable<T extends Record<string, unknown>>({
               {data.length > 0 ? (
                 data.map((record, index) => (
                   <tr
-                    key={(record.id as string | number) || index}
+                    key={(record as any).id || index}
                     className={cn(
                       "border-b last:border-0 hover:bg-muted/50 transition-colors",
                       onRowClick && "cursor-pointer",
@@ -123,7 +123,7 @@ function DataTable<T extends Record<string, unknown>>({
 
                       return (
                         <td
-                          key={column.key}
+                          key={String(column.key)}
                           className={cn("p-4", {
                             "text-left":
                               column.align === "left" || !column.align,

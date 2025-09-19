@@ -3,7 +3,7 @@
 import { Control, UseFormSetValue, useWatch } from "react-hook-form";
 import { AdRequestCreateFormType } from "@/schema/adRequestCreate.schema";
 import { MultiSelectForm, CheckBoxGroupForm } from "@/components/form";
-import adisonMediaData from "@/data/adisonMedia.json";
+import publishersData from "@/data/publishers.json";
 
 interface AdisonPublisherTargetingFormProps {
   control: Control<AdRequestCreateFormType>;
@@ -25,7 +25,7 @@ const TARGETING_TYPE_OPTIONS = [
   },
 ];
 
-const MEDIA_OPTIONS = adisonMediaData.map((media) => ({
+const INITIAL_PUBLISHER_OPTIONS = publishersData.map((media) => ({
   value: media.id.toString(),
   label: media.name,
 }));
@@ -62,7 +62,8 @@ const AdisonPublisherTargetingForm: React.FC<
           control={control}
           label="지정할 매체를 선택하세요"
           placeholder="매체를 선택해주세요"
-          options={MEDIA_OPTIONS}
+          options={INITIAL_PUBLISHER_OPTIONS}
+          maxHeight="300px"
         />
       )}
 
@@ -72,7 +73,8 @@ const AdisonPublisherTargetingForm: React.FC<
           control={control}
           label="제외할 매체를 선택하세요"
           placeholder="매체를 선택해주세요"
-          options={MEDIA_OPTIONS}
+          options={INITIAL_PUBLISHER_OPTIONS}
+          maxHeight="300px"
         />
       )}
 

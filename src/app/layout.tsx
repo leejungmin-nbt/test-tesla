@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import localFont from "next/font/local";
 import { MainLayout } from "@/layout";
 import { Toaster } from "@/components/ui/sonner";
+import { ReactQueryProvider } from "@/providers";
 
 const pretendard = localFont({
   src: "../../public/fonts/PretendardVariable.woff2",
@@ -41,8 +42,10 @@ export default function RootLayout({
           antialiased
         `}
       >
-        <MainLayout>{children}</MainLayout>
-        <Toaster />
+        <ReactQueryProvider>
+          <MainLayout>{children}</MainLayout>
+          <Toaster />
+        </ReactQueryProvider>
       </body>
     </html>
   );
