@@ -19,12 +19,14 @@ import {
   saveFormData,
   loadFormData,
   clearFormData,
+  addAdRequest,
 } from "@/utils/localStorage";
 import ConfirmRegistrationModal from "./_components/ConfirmRegistrationModal";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
-import { createAdRequestMutationOptions } from "@/lib/features/adRequests/queries";
+// API 호출 관련 import 주석 처리
+// import { useMutation } from "@tanstack/react-query";
+// import { createAdRequestMutationOptions } from "@/lib/features/adRequests/queries";
 
 const CreateAdRequestPage = () => {
   const [step, setStep] = useState(1);
@@ -34,10 +36,14 @@ const CreateAdRequestPage = () => {
     useState<AdRequestCreateFormType | null>(null);
   const router = useRouter();
 
-  const { mutate: createAdRequest, isPending: isCreatingAdRequestPending } =
-    useMutation({
-      ...createAdRequestMutationOptions,
-    });
+  // API 호출 부분을 주석 처리하고 localStorage 사용
+  // const { mutate: createAdRequest, isPending: isCreatingAdRequestPending } =
+  //   useMutation({
+  //     ...createAdRequestMutationOptions,
+  //   });
+
+  const [isCreatingAdRequestPending, setIsCreatingAdRequestPending] =
+    useState(false);
 
   const {
     control,
@@ -188,7 +194,7 @@ const CreateAdRequestPage = () => {
     }
   };
 
-  // 실제 등록 처리
+  // 실제 등록 처리 - localStorage 사용
   const onSubmit = (data: AdRequestCreateFormType) => {
     console.log("제출 폼 데이터 >> ", data);
 
@@ -223,15 +229,39 @@ const CreateAdRequestPage = () => {
     };
     console.log("newData >> ", newData);
 
-    createAdRequest(newData, {
-      onSuccess: () => {
-        toast.success("광고 요청이 성공적으로 등록되었습니다!");
-        router.push("/ad-requests");
-      },
-      onError: () => {
-        toast.error("광고 요청 등록에 실패했습니다.");
-      },
-    });
+    setIsCreatingAdRequestPending(true);
+
+    try {
+      // localStorage에 광고 요청 저장
+      addAdRequest({
+        name: data.title,
+        content: newData,
+        targets: [],
+        memo: "",
+      });
+
+      // 폼 데이터 초기화
+      clearFormData();
+
+      toast.success("광고 요청이 성공적으로 등록되었습니다!");
+      router.push("/ad-requests");
+    } catch (error) {
+      console.error("광고 요청 등록 실패:", error);
+      toast.error("광고 요청 등록에 실패했습니다.");
+    } finally {
+      setIsCreatingAdRequestPending(false);
+    }
+
+    // 기존 API 호출 부분 (주석 처리)
+    // createAdRequest(newData, {
+    //   onSuccess: () => {
+    //     toast.success("광고 요청이 성공적으로 등록되었습니다!");
+    //     router.push("/ad-requests");
+    //   },
+    //   onError: () => {
+    //     toast.error("광고 요청 등록에 실패했습니다.");
+    //   },
+    // });
   };
 
   // 모달에서 등록 확인 시 호출되는 함수

@@ -6,12 +6,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft } from "lucide-react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  adRequestDetailQueryOptions,
-  adRequestKeys,
-  approveAdRequestMutationOptions,
-} from "@/lib/features/adRequests";
+// API 호출 관련 import 주석 처리
+// import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+// import {
+//   adRequestDetailQueryOptions,
+//   adRequestKeys,
+//   approveAdRequestMutationOptions,
+// } from "@/lib/features/adRequests";
+import { loadAdRequests, updateAdRequestStatus } from "@/utils/localStorage";
 import {
   getAdvertiserName,
   getCategoryName,
@@ -28,21 +30,50 @@ import { AD_REQUEST_STATUS } from "@/constants/adRequest";
 import { formatDate } from "@/utils/date";
 import { toast } from "sonner";
 import { Modal } from "@/components/common/Modal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const AdRequestDetailPage = () => {
   const { id: idParam } = useParams();
   const router = useRouter();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient(); // API 호출 관련 주석 처리
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const { data, isLoading } = useQuery({
-    ...adRequestDetailQueryOptions(String(idParam)),
-  });
 
-  const { mutate: approveAdRequest, isPending: isApproveAdRequestPending } =
-    useMutation({
-      ...approveAdRequestMutationOptions(),
-    });
+  // API 호출 부분을 주석 처리하고 localStorage 사용
+  // const { data, isLoading } = useQuery({
+  //   ...adRequestDetailQueryOptions(String(idParam)),
+  // });
+
+  // localStorage에서 데이터 가져오기
+  const [data, setData] = useState<unknown>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 컴포넌트 마운트 시 localStorage에서 데이터 로드
+  useEffect(() => {
+    const loadData = () => {
+      try {
+        const adRequests = loadAdRequests();
+        const adRequest = adRequests.find(
+          (req: any) => req.id === Number(idParam)
+        );
+        setData(adRequest);
+      } catch (error) {
+        console.error("Failed to load ad request detail:", error);
+        setData(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadData();
+  }, [idParam]);
+
+  // API 호출 부분을 주석 처리하고 localStorage 사용
+  // const { mutate: approveAdRequest, isPending: isApproveAdRequestPending } =
+  //   useMutation({
+  //     ...approveAdRequestMutationOptions(),
+  //   });
+
+  const [isApproveAdRequestPending, setIsApproveAdRequestPending] =
+    useState(false);
 
   if (isLoading) {
     return (
@@ -73,7 +104,11 @@ const AdRequestDetailPage = () => {
     );
   }
 
-  const { name, content, status, createdAt, updatedAt } = data;
+  const { name, content, status } = data as {
+    name: string;
+    content: any;
+    status: number;
+  };
 
   const getStatusColor = (status: number) => {
     const statusData = AD_REQUEST_STATUS.find((item) => item.id === status);
@@ -89,19 +124,38 @@ const AdRequestDetailPage = () => {
   };
 
   const handleApproveAdRequest = () => {
-    approveAdRequest(String(idParam), {
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: adRequestKeys.detail(String(idParam)),
-        });
-        router.refresh();
-        toast.success("광고 요청이 검수 완료되었습니다!");
-      },
-      onError: () => {
-        toast.error("광고 요청 검수 완료에 실패했습니다.");
-      },
-    });
-    setIsOpenModal(false);
+    setIsApproveAdRequestPending(true);
+
+    try {
+      // localStorage에서 상태 업데이트
+      updateAdRequestStatus(Number(idParam), 2); // 2는 검수완료 상태
+
+      // 로컬 상태도 업데이트
+      setData((prev: any) => (prev ? { ...prev, status: 2 } : null));
+
+      toast.success("광고 요청이 검수 완료되었습니다!");
+      setIsOpenModal(false);
+    } catch (error) {
+      console.error("광고 요청 검수 완료 실패:", error);
+      toast.error("광고 요청 검수 완료에 실패했습니다.");
+    } finally {
+      setIsApproveAdRequestPending(false);
+    }
+
+    // 기존 API 호출 부분 (주석 처리)
+    // approveAdRequest(String(idParam), {
+    //   onSuccess: () => {
+    //     queryClient.invalidateQueries({
+    //       queryKey: adRequestKeys.detail(String(idParam)),
+    //     });
+    //     router.refresh();
+    //     toast.success("광고 요청이 검수 완료되었습니다!");
+    //   },
+    //   onError: () => {
+    //     toast.error("광고 요청 검수 완료에 실패했습니다.");
+    //   },
+    // });
+    // setIsOpenModal(false);
   };
 
   return (
@@ -205,10 +259,10 @@ const AdRequestDetailPage = () => {
                   </label>
                   <div className="mt-1 flex flex-wrap gap-1">
                     {getHelpRequestPersonalInfoTypeNames(
-                      content.helpRequestPersonalInfoTypeIds.map((id) =>
+                      content.helpRequestPersonalInfoTypeIds.map((id: any) =>
                         id.toString()
                       )
-                    ).map((name, index) => (
+                    ).map((name: any, index: number) => (
                       <Badge
                         key={index}
                         variant="secondary"
@@ -299,10 +353,10 @@ const AdRequestDetailPage = () => {
                   </label>
                   <div className="mt-1 flex flex-wrap gap-1">
                     {getAdisonModeName(
-                      content.targetAdisonPublisherIds.mode.map((mode) =>
+                      content.targetAdisonPublisherIds.mode.map((mode: any) =>
                         mode.toString()
                       )
-                    ).map((mode, index) => (
+                    ).map((mode: any, index: number) => (
                       <Badge key={index} variant="outline" className="text-xs">
                         {mode}
                       </Badge>
@@ -315,8 +369,8 @@ const AdRequestDetailPage = () => {
                   </label>
                   <div className="mt-1 flex flex-wrap gap-1">
                     {getOsNames(
-                      content.targetOs.map((os) => os.toString())
-                    ).map((os, index) => (
+                      content.targetOs.map((os: any) => os.toString())
+                    ).map((os: any, index: number) => (
                       <Badge key={index} variant="outline" className="text-xs">
                         {os}
                       </Badge>
@@ -364,8 +418,10 @@ const AdRequestDetailPage = () => {
                     </label>
                     <div className="mt-1 flex flex-wrap gap-1">
                       {getGenderNames(
-                        content.targetGenders.map((gender) => gender.toString())
-                      ).map((gender, index) => (
+                        content.targetGenders.map((gender: any) =>
+                          gender.toString()
+                        )
+                      ).map((gender: any, index: number) => (
                         <Badge
                           key={index}
                           variant="outline"
@@ -383,9 +439,9 @@ const AdRequestDetailPage = () => {
                     <label className="text-muted-foreground text-sm font-medium">
                       타겟 연령
                     </label>
-                    <p className="text-sm">
+                    <div className="text-sm">
                       {content.targetAges && content.targetAges.length > 0
-                        ? content.targetAges.map((age, index) => (
+                        ? content.targetAges.map((age: any, index: number) => (
                             <Badge
                               key={index}
                               variant="outline"
@@ -395,7 +451,7 @@ const AdRequestDetailPage = () => {
                             </Badge>
                           ))
                         : "-"}
-                    </p>
+                    </div>
                   </div>
                 )}
                 <div>
